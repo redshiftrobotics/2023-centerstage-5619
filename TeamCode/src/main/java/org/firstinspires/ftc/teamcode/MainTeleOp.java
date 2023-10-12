@@ -5,15 +5,17 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name="Basic: Omni Drive", group="Linear OpMode")
-public class driveTrain extends LinearOpMode {
+@TeleOp(name="Main Drive", group="Linear OpMode")
+public class MainTeleOp extends LinearOpMode {
 
   // Declare OpMode members for each of the 4 motors.
   private ElapsedTime runtime = new ElapsedTime();
-  private DcMotor leftFrontDrive = null;
-  private DcMotor leftBackDrive = null;
-  private DcMotor rightFrontDrive = null;
-  private DcMotor rightBackDrive = null;
+  private DcMotor leftFrontDrive;
+  private DcMotor leftBackDrive;
+  private DcMotor rightFrontDrive;
+  private DcMotor rightBackDrive;
+
+  private DcMotor arm;
 
   @Override
   public void runOpMode() {
@@ -23,6 +25,11 @@ public class driveTrain extends LinearOpMode {
     leftBackDrive  = hardwareMap.get(DcMotor.class, "BL");
     rightFrontDrive = hardwareMap.get(DcMotor.class, "FR");
     rightBackDrive = hardwareMap.get(DcMotor.class, "BR");
+
+    // get arm
+    arm = hardwareMap.get(DcMotor.class, "top arm");
+    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    arm.setPower(0.5);
 
     // set if motor is reversed
     leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -36,6 +43,8 @@ public class driveTrain extends LinearOpMode {
 
     waitForStart();
     runtime.reset();
+
+    int targetArmPosition = arm.getCurrentPosition();
 
     // run until the end of the match (driver presses STOP)
     while (opModeIsActive()) {
@@ -76,5 +85,10 @@ public class driveTrain extends LinearOpMode {
       telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
       telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
       telemetry.update();
+
+      if (gamepad1.dpad_down) targetArmPosition += 1;
+      if (gamepad1.dpad_down) targetArmPosition -= 1;
+
+      arm.setTargetPosition(targetArmPosition);
     }
   }}
