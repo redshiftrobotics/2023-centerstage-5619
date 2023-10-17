@@ -5,8 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Const;
-
 @TeleOp(name="Main Drive", group="Linear OpMode")
 public class MainTeleOp extends LinearOpMode {
 
@@ -16,27 +14,34 @@ public class MainTeleOp extends LinearOpMode {
   @Override
   public void runOpMode() {
 
-    // get motors using set motor names
+    // Get motors using set motor names
     final DcMotor leftFrontDrive = hardwareMap.get(DcMotor.class, "FL");
     final DcMotor leftBackDrive  = hardwareMap.get(DcMotor.class, "BL");
     final DcMotor rightFrontDrive = hardwareMap.get(DcMotor.class, "FR");
     final DcMotor rightBackDrive = hardwareMap.get(DcMotor.class, "BR");
 
+    // Set if motor is reversed
     leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
     leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
     rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
     rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
 
+    // Enable or disable braking
+    leftFrontDrive.setZeroPowerBehavior(Constants.moveMotorZeroBehavior);
+    leftBackDrive.setZeroPowerBehavior(Constants.moveMotorZeroBehavior);
+    rightFrontDrive.setZeroPowerBehavior(Constants.moveMotorZeroBehavior);
+    rightBackDrive.setZeroPowerBehavior(Constants.moveMotorZeroBehavior);
+
+    // Set arm motor mode
     final DcMotor arm = hardwareMap.get(DcMotor.class, "top arm");
+    arm.setDirection(DcMotor.Direction.FORWARD);
 
     int targetArmPosition = arm.getCurrentPosition();
 
     arm.setTargetPosition(targetArmPosition);
     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     arm.setPower(Constants.armPower);
-
-    // set if motor is reversed
-
 
     // Wait for the game to start (driver presses PLAY)
     telemetry.addData("Status", "Initialized");
@@ -45,26 +50,37 @@ public class MainTeleOp extends LinearOpMode {
     waitForStart();
     runtime.reset();
 
+    telemetry.addData("Status", "Staring...");
+    telemetry.update();
+
+    // Set up slow mode variables
     boolean isSlowMode = Constants.shouldStartInSlow;
-    boolean lastBstate = false;
+    boolean lastBState = false;
 
-    // run until the end of the match (driver presses STOP)
+    // Run until the end of the match (driver presses STOP)
     while (opModeIsActive()) {
-      double max;
 
+      // Check if slow mode is enabled and check if it should toggle on or if it must be held
+      // TODO make wrapper around button presses to check for keydown/keyup
       if (Constants.slowModeIsToggleMode) {
-        if (gamepad1.b && !lastBstate) isSlowMode = !isSlowMode;
+        if (gamepad1.b && !lastBState) isSlowMode = !isSlowMode;
       }
       else {
         isSlowMode = gamepad1.b;
       }
-      lastBstate = gamepad1.b;
+      lastBState = gamepad1.b;
 
-      // left joystick to go forward & strafe, and right joystick to rotate.
-      double axial = -gamepad1.left_stick_y * Constants.moveSpeedModifiers[1 + (gamepad1.left_stick_button ? 1 : 0) - (isSlowMode ? 1 : 0)];
-      double lateral = gamepad1.left_stick_x * Constants.moveSpeedModifiers[1 + (gamepad1.left_stick_button ? 1 : 0) - (isSlowMode ? 1 : 0)];
-      double yaw = gamepad1.right_stick_x * Constants.spinSpeedModifiers[1 + (gamepad1.right_stick_button ? 1 : 0) - (isSlowMode ? 1 : 0)];
+      // Check which speed modifier mode to be in. Speed modifies just change joystick input
+      // Pressing down on stick bumps it up a mode, slow mode bumps it down one, default is middle (1)
+      final double moveSpeedModifier = Constants.moveSpeedModifiers[1 + (gamepad1.left_stick_button ? 1 : 0) - (isSlowMode ? 1 : 0)];
+      final double spinSpeedModifier = Constants.spinSpeedModifiers[1 + (gamepad1.right_stick_button ? 1 : 0) - (isSlowMode ? 1 : 0)];
 
+      // Left joystick to go forward & strafe, and right joystick to rotate.
+      double axial = -gamepad1.left_stick_y * moveSpeedModifier;
+      double lateral = gamepad1.left_stick_x * moveSpeedModifier;
+      double yaw = gamepad1.right_stick_x * spinSpeedModifier;
+
+      // Up on dpad to move target position up and down to move target down
       if (gamepad1.dpad_down) targetArmPosition += Constants.armMoveAmount;
       if (gamepad1.dpad_down) targetArmPosition -= Constants.armMoveAmount;
 
@@ -74,11 +90,11 @@ public class MainTeleOp extends LinearOpMode {
       double leftBackPower = axial - lateral + yaw;
       double rightBackPower = axial + lateral - yaw;
 
-
       // Normalize values so no wheel power exceeds 100%
-      max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
-      max = Math.max(max, Math.abs(leftBackPower));
-      max = Math.max(max, Math.abs(rightBackPower));
+      double max = Math.max(
+              Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower)),
+              Math.max(Math.abs(leftBackPower), Math.abs(rightBackPower))
+      );
 
       if (max > 1.0) {
         leftFrontPower /= max;
@@ -87,6 +103,7 @@ public class MainTeleOp extends LinearOpMode {
         rightBackPower /= max;
       }
 
+      // Send target position for arm
       arm.setTargetPosition(targetArmPosition);
 
       // Send power to wheels
@@ -95,16 +112,18 @@ public class MainTeleOp extends LinearOpMode {
       leftBackDrive.setPower(leftBackPower);
       rightBackDrive.setPower(rightBackPower);
 
-      // telemetry
+      // telemetry read outs
       telemetry.addData("Status", "Run Time: %s", runtime.toString());
-      telemetry.addData("Front Left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
-      telemetry.addData("Back  Left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
 
-      telemetry.addData("Arm   Target/Real", "%d, %d", targetArmPosition, arm.getCurrentPosition());
+      // drive telemetry
+      telemetry.addData("Speed Modifiers", "Move: %f, Spin: %f", moveSpeedModifier, spinSpeedModifier);
+      telemetry.addData("Front", "Left: %4.2f, Right: %4.2f", leftFrontPower, rightFrontPower);
+      telemetry.addData("Back ", "Left: %4.2f, Right: %4.2f", leftBackPower, rightBackPower);
 
-      telemetry.addData("Slow Mode: ", String.valueOf(isSlowMode));
+      // device telemetry
+      telemetry.addData("Arm Position", "Current: %d, Target: %d", arm.getCurrentPosition(), targetArmPosition);
 
       telemetry.update();
-
     }
-  }}
+  }
+}
