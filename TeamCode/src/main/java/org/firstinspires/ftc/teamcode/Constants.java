@@ -5,7 +5,7 @@ public class Constants {
 
     public static class ArmConstants {
         public static  final double armPower = 0.3;
-        public static final int armMoveAmount = 20;
+        public static final int armMoveAmount = 1;
     }
 
     public static class DriveTrainConstants {
@@ -13,6 +13,9 @@ public class Constants {
         public static final DcMotor.Direction leftBackDriveDirection = DcMotor.Direction.REVERSE;
         public static final DcMotor.Direction rightFrontDriveDirection = DcMotor.Direction.FORWARD;
         public static final DcMotor.Direction rightBackDriveDirection = DcMotor.Direction.FORWARD;
+
+        public static final DcMotor.Direction armDirection = DcMotor.Direction.FORWARD;
+
     }
 
     public static class DriverConstants {
