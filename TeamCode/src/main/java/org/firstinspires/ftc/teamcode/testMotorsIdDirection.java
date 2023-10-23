@@ -23,10 +23,10 @@ public class testMotorsIdDirection extends LinearOpMode {
 
 
         // set if motor is reversed
-        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftFrontDrive.setDirection(Constants.DriveTrainConstants.leftFrontDriveDirection);
+        leftBackDrive.setDirection(Constants.DriveTrainConstants.leftBackDriveDirection);
+        rightFrontDrive.setDirection(Constants.DriveTrainConstants.rightFrontDriveDirection);
+        rightBackDrive.setDirection(Constants.DriveTrainConstants.rightBackDriveDirection);
 
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Status", "Initialized");
