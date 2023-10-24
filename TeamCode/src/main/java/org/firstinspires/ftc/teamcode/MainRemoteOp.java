@@ -44,21 +44,21 @@ public class MainRemoteOp extends LinearOpMode {
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         arm.setPower(Constants.ArmConstants.armPower);
 
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
+        boolean isSlowMode = false;
+        boolean lastBState = false;
 
         int targetArmPosition = 0;
-
-        boolean isSlowMode = Constants.DriverConstants.shouldStartInSlow;
-        boolean lastBState = false;
 
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setTargetPosition(targetArmPosition);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        runtime.reset();
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
 
         waitForStart();
+
+        runtime.reset();
 
         while (opModeIsActive()) {
             // Check if slow mode is enabled and check if it should toggle on or if it must be held
@@ -72,8 +72,10 @@ public class MainRemoteOp extends LinearOpMode {
 
             // Check which speed modifier mode to be in. Speed modifies just change joystick input
             // Pressing down on stick bumps it up a mode, slow mode bumps it down one, default is middle (1)
-            final double linearSpeedModifier = Constants.DriverConstants.linearSpeedModifiers[1 + (gamepad1.left_stick_button ? 1 : 0) - (isSlowMode ? 1 : 0)];
-            final double angularSpeedModifier = Constants.DriverConstants.angularSpeedModifiers[1 + (gamepad1.right_stick_button ? 1 : 0) - (isSlowMode ? 1 : 0)];
+            final int linearSpeedMode = 1 + (gamepad1.left_stick_button ? 1 : 0) - (isSlowMode ? 1 : 0);
+            final double linearSpeedModifier = Constants.DriverConstants.linearSpeedModifiers[linearSpeedMode];
+            final int angularSpeedMode = 1 + (gamepad1.right_stick_button ? 1 : 0) - (isSlowMode ? 1 : 0);
+            final double angularSpeedModifier = Constants.DriverConstants.angularSpeedModifiers[angularSpeedMode];
 
             // Left joystick does linear movement / translation (forward, backward, left, right, diagonals)
             // Right joystick does angular movement / rotation (spinning in place and arks).
@@ -86,14 +88,21 @@ public class MainRemoteOp extends LinearOpMode {
             final double lateral = gamepad1.left_stick_x * linearSpeedModifier;
             final double yaw = gamepad1.right_stick_x * angularSpeedModifier;
 
-            double ark = gamepad1.right_stick_y * angularSpeedModifier;
-            if (ark < Constants.DriverConstants.arkPowerThreshHold) ark = 0;
+            // "ark" allows you to spin backward around a point, allowing you to turn around while still moving
+            
+            double frontArk = gamepad1.right_stick_y * angularSpeedModifier;
+            if (!Constants.DriverConstants.enableArk || Math.abs(frontArk) < Constants.DriverConstants.arkPowerThreshHold * angularSpeedModifier)
+                frontArk = 0;
+
+            double backArk = 0 * angularSpeedModifier;
+            if (!Constants.DriverConstants.enableArk || Math.abs(backArk) < Constants.DriverConstants.arkPowerThreshHold * angularSpeedModifier)
+                backArk = 0;
 
             // Combine joystick requests for each axis-motion to determine each wheel's power.
-            double leftFrontPower = axial + lateral + yaw + ark;
-            double rightFrontPower = axial - lateral - yaw - ark;
-            double leftBackPower = axial - lateral + yaw;
-            double rightBackPower = axial + lateral - yaw;
+            double leftFrontPower = axial + lateral + yaw + frontArk;
+            double rightFrontPower = axial - lateral - yaw - frontArk;
+            double leftBackPower = axial - lateral + yaw + backArk;
+            double rightBackPower = axial + lateral - yaw - backArk;
 
 
             // Find highest power so we can check if it exceeds the max
@@ -139,15 +148,15 @@ public class MainRemoteOp extends LinearOpMode {
             // Send target position for arm
             arm.setTargetPosition(targetArmPosition);
 
-            // telemetry read outs
+            // Run time telemetry, mostly just to check if the program is running all right.
             telemetry.addData("Status", "Run Time: %s", runtime.toString());
 
-            // drive telemetry
+            // Drive telemetry
             telemetry.addData("Speed Modifiers", "Linear: %.0f%%, Angular: %.0f%%", linearSpeedModifier * 100, angularSpeedModifier * 100);
             telemetry.addData("Front", "Left: %4.2f, Right: %4.2f", leftFrontPower, rightFrontPower);
             telemetry.addData("Back ", "Left: %4.2f, Right: %4.2f", leftBackPower, rightBackPower);
 
-            // device telemetry
+            // Device telemetry
             telemetry.addData("Arm Position", "Current: %d, Target: %d", arm.getCurrentPosition(), targetArmPosition);
 
             telemetry.update();
