@@ -1,22 +1,18 @@
 package org.firstinspires.ftc.teamcode;
-
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
-@TeleOp(name = "ArmTick")
+@TeleOp(name = "TestMotor")
 @Disabled
-public class ArmTick extends LinearOpMode {
-    private DcMotor arm;
-
-
+public class TestMotor extends LinearOpMode {
+    private DcMotor motor;
     @Override
     public void runOpMode() {
-        arm = hardwareMap.get(DcMotor.class, "top arm");
+        motor = hardwareMap.get(DcMotor.class, "motor");
         waitForStart();
         while (opModeIsActive()) {
-            arm.setPower(0.5);
+            motor.setPower(0.5);
         }
     }
 }

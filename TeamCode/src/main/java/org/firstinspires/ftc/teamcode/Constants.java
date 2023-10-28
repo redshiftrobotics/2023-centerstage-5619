@@ -6,10 +6,18 @@ public class Constants {
     public static class ArmConstants {
         // What power level the amr is set to. Between 0 and 1 with one being max power.
         // This does not control directly speed, it controls how much power the motor will use to get to a desired position
-        public static  final double armPower = 0.5;
+        public static  final double armPower = 1;
 
         // How many encoder ticks the arm moves each time button is pressed
-        public static final int armMoveAmount = 1;
+        public static final int armMoveAmount = 3;
+
+        public static final int minPosition = -900;
+        public static final int maxPosition = 3800;
+
+        public static final int armUpSetPoint = 2000;
+        public static final int armDownSetPoint = -800;
+
+        public static final DcMotor.Direction armDirection = DcMotor.Direction.FORWARD;
     }
 
     public static class DriveTrainConstants {
@@ -20,9 +28,8 @@ public class Constants {
         public static final DcMotor.Direction rightFrontDriveDirection = DcMotor.Direction.FORWARD;
         public static final DcMotor.Direction rightBackDriveDirection = DcMotor.Direction.FORWARD;
 
-        public static final DcMotor.Direction armDirection = DcMotor.Direction.FORWARD;
-
     }
+
 
     public static class DriverConstants {
 
@@ -53,5 +60,15 @@ public class Constants {
 
         // If slowModeIsToggleMode is true then slow mode will be toggled on and off, if it is false then you have to hold slow mode button.
         public static final boolean slowModeIsToggleMode = true;
+    }
+
+    public static class OdometryConstants {
+        public static final double wheelDiameterMM = 48;
+        public static final double ticksInRotation = 2000;
+        public static final double wheelCircumferenceMM = wheelDiameterMM * Math.PI;
+        public static final double tickInMM = wheelCircumferenceMM / ticksInRotation;
+
+        public static final double TRACK_WIDTH = 1;
+        public static final double FORWARD_OFFSET = 1;
     }
 }

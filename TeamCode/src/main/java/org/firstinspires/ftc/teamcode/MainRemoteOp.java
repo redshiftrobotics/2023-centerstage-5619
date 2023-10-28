@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Const;
+
 @TeleOp(name = "Main Remote")
 public class MainRemoteOp extends LinearOpMode {
 
@@ -39,7 +41,7 @@ public class MainRemoteOp extends LinearOpMode {
         arm = hardwareMap.get(DcMotor.class, "top arm");
 
         // Set arm motor mode
-        arm.setDirection(Constants.DriveTrainConstants.armDirection);
+        arm.setDirection(Constants.ArmConstants.armDirection);
 
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         arm.setPower(Constants.ArmConstants.armPower);
@@ -94,15 +96,12 @@ public class MainRemoteOp extends LinearOpMode {
             if (!Constants.DriverConstants.enableArk || Math.abs(frontArk) < Constants.DriverConstants.arkPowerThreshHold * angularSpeedModifier)
                 frontArk = 0;
 
-            double backArk = 0 * angularSpeedModifier;
-            if (!Constants.DriverConstants.enableArk || Math.abs(backArk) < Constants.DriverConstants.arkPowerThreshHold * angularSpeedModifier)
-                backArk = 0;
 
             // Combine joystick requests for each axis-motion to determine each wheel's power.
             double leftFrontPower = axial + lateral + yaw + frontArk;
             double rightFrontPower = axial - lateral - yaw - frontArk;
-            double leftBackPower = axial - lateral + yaw + backArk;
-            double rightBackPower = axial + lateral - yaw - backArk;
+            double leftBackPower = axial - lateral + yaw;
+            double rightBackPower = axial + lateral - yaw;
 
 
             // Find highest power so we can check if it exceeds the max
@@ -138,6 +137,17 @@ public class MainRemoteOp extends LinearOpMode {
             // Up on dpad to move target position up and down to move target down
             if (gamepad1.dpad_up) targetArmPosition += Constants.ArmConstants.armMoveAmount;
             if (gamepad1.dpad_down) targetArmPosition -= Constants.ArmConstants.armMoveAmount;
+
+            if (targetArmPosition < Constants.ArmConstants.minPosition) {
+                targetArmPosition = Constants.ArmConstants.minPosition;
+            }
+            if (targetArmPosition > Constants.ArmConstants.maxPosition) {
+                targetArmPosition = Constants.ArmConstants.maxPosition;
+            }
+
+            if (gamepad1.left_trigger > 0.9) targetArmPosition = Constants.ArmConstants.armUpSetPoint;
+            if (gamepad1.right_trigger > 0.9) targetArmPosition = Constants.ArmConstants.armDownSetPoint;
+
 
             // Send power to wheels
             leftFrontDrive.setPower(leftFrontPower);
