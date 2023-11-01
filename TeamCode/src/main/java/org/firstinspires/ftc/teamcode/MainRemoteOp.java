@@ -135,18 +135,11 @@ public class MainRemoteOp extends LinearOpMode {
             }
 
             // Up on dpad to move target position up and down to move target down
-            if (gamepad1.dpad_up) targetArmPosition += Constants.ArmConstants.armMoveAmount;
-            if (gamepad1.dpad_down) targetArmPosition -= Constants.ArmConstants.armMoveAmount;
+            if (gamepad1.dpad_up) targetArmPosition = Math.min(targetArmPosition + Constants.ArmConstants.armMoveAmount, Constants.ArmConstants.maxPosition);
+            if (gamepad1.dpad_down) targetArmPosition = Math.max((targetArmPosition - Constants.ArmConstants.armMoveAmount), Constants.ArmConstants.minPosition);
 
-            if (targetArmPosition < Constants.ArmConstants.minPosition) {
-                targetArmPosition = Constants.ArmConstants.minPosition;
-            }
-            if (targetArmPosition > Constants.ArmConstants.maxPosition) {
-                targetArmPosition = Constants.ArmConstants.maxPosition;
-            }
-
-            if (gamepad1.left_trigger > 0.9) targetArmPosition = Constants.ArmConstants.armUpSetPoint;
-            if (gamepad1.right_trigger > 0.9) targetArmPosition = Constants.ArmConstants.armDownSetPoint;
+            if (gamepad1.left_trigger > Constants.DriverConstants.triggerThreshold) targetArmPosition = Constants.ArmConstants.armUpSetPoint;
+            if (gamepad1.right_trigger > Constants.DriverConstants.triggerThreshold) targetArmPosition = Constants.ArmConstants.armDownSetPoint;
 
 
             // Send power to wheels

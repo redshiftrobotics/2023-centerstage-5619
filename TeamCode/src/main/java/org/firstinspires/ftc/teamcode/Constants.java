@@ -27,7 +27,6 @@ public class Constants {
         public static final DcMotor.Direction leftBackDriveDirection = DcMotor.Direction.REVERSE;
         public static final DcMotor.Direction rightFrontDriveDirection = DcMotor.Direction.FORWARD;
         public static final DcMotor.Direction rightBackDriveDirection = DcMotor.Direction.FORWARD;
-
     }
 
 
@@ -60,6 +59,9 @@ public class Constants {
 
         // If slowModeIsToggleMode is true then slow mode will be toggled on and off, if it is false then you have to hold slow mode button.
         public static final boolean slowModeIsToggleMode = true;
+
+        // How far trigger needs to be pressed to activate
+        public static final double triggerThreshold = 0.9;
     }
 
     public static class OdometryConstants {
