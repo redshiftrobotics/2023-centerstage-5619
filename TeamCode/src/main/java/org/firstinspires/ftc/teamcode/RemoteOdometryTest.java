@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "Odometry Test")
+@Disabled
 public class RemoteOdometryTest extends LinearOpMode {
 
     private final ElapsedTime runtime = new ElapsedTime();
@@ -29,6 +32,14 @@ public class RemoteOdometryTest extends LinearOpMode {
         leftEncoder = hardwareMap.get(DcMotor.class, "LE");
         centerEncoder = hardwareMap.get(DcMotor.class, "CE");
         rightEncoder = hardwareMap.get(DcMotor.class, "RE");
+
+        leftEncoder.setDirection(DcMotorSimple.Direction.FORWARD);
+        centerEncoder.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightEncoder.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        leftEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         leftFrontDrive.setDirection(Constants.DriveTrainConstants.leftFrontDriveDirection);
         leftBackDrive.setDirection(Constants.DriveTrainConstants.leftBackDriveDirection);
@@ -81,7 +92,6 @@ public class RemoteOdometryTest extends LinearOpMode {
 
             final double linearSpeedModifier = Constants.DriverConstants.linearSpeedModifiers[0];
             final double angularSpeedModifier = Constants.DriverConstants.angularSpeedModifiers[0];
-
 
             final double axial = -gamepad1.left_stick_y * linearSpeedModifier;
             final double lateral = gamepad1.left_stick_x * linearSpeedModifier;
