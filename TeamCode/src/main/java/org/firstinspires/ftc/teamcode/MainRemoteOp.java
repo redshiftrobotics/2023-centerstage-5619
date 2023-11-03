@@ -46,9 +46,6 @@ public class MainRemoteOp extends LinearOpMode {
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         arm.setPower(Constants.ArmConstants.armPower);
 
-        boolean isSlowMode = false;
-        boolean lastBState = false;
-
         int targetArmPosition = 0;
 
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -61,6 +58,9 @@ public class MainRemoteOp extends LinearOpMode {
         waitForStart();
 
         runtime.reset();
+
+        boolean isSlowMode = false;
+        boolean lastBState = false;
 
         while (opModeIsActive()) {
             // Check if slow mode is enabled and check if it should toggle on or if it must be held
@@ -118,6 +118,7 @@ public class MainRemoteOp extends LinearOpMode {
                 rightBackPower /= maxPower;
             }
 
+            // Set the motors to resist any movement if the max power being sent to the motors is below threshold
             final boolean shouldBrakeStoppedMotors = maxPower < Constants.DriverConstants.minPowerBrakeThreshold
                     || (isSlowMode && Constants.DriverConstants.slowModeBrake);
 
@@ -134,10 +135,12 @@ public class MainRemoteOp extends LinearOpMode {
                 rightBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
             }
 
-            // Up on dpad to move target position up and down to move target down
+            // Up on dpad to move target position up.
+            // Down on dpad to move it down.
             if (gamepad1.dpad_up) targetArmPosition = Math.min(targetArmPosition + Constants.ArmConstants.armMoveAmount, Constants.ArmConstants.maxPosition);
             if (gamepad1.dpad_down) targetArmPosition = Math.max((targetArmPosition - Constants.ArmConstants.armMoveAmount), Constants.ArmConstants.minPosition);
 
+            // Move to set points if triggers
             if (gamepad1.left_trigger > Constants.DriverConstants.triggerThreshold) targetArmPosition = Constants.ArmConstants.armUpSetPoint;
             if (gamepad1.right_trigger > Constants.DriverConstants.triggerThreshold) targetArmPosition = Constants.ArmConstants.armDownSetPoint;
 
@@ -159,7 +162,7 @@ public class MainRemoteOp extends LinearOpMode {
             telemetry.addData("Front", "Left: %4.2f, Right: %4.2f", leftFrontPower, rightFrontPower);
             telemetry.addData("Back ", "Left: %4.2f, Right: %4.2f", leftBackPower, rightBackPower);
 
-            // Device telemetry
+            // Arm telemetry
             telemetry.addData("Arm Position", "Current: %d, Target: %d", arm.getCurrentPosition(), targetArmPosition);
 
             telemetry.update();

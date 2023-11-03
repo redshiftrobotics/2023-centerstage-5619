@@ -8,15 +8,24 @@ public class Constants {
         // This does not control directly speed, it controls how much power the motor will use to get to a desired position
         public static  final double armPower = 1;
 
-        // How many encoder ticks the arm moves each time button is pressed
+        // How many encoder ticks the arm moves each time button is pressed.
+        // Do not set this to high otherwise the arm may keep on moving even after you stop holding button.
+        // This controls speed.
         public static final int armMoveAmount = 3;
 
+        // Minimum position the arm can go to (Relative to start facing forwards)
         public static final int minPosition = -900;
+
+        // Maximum position the arm can go to (Relative to start facing forwards)
         public static final int maxPosition = 3800;
 
+        // Placing set point (Relative to start facing forwards)
         public static final int armUpSetPoint = 2000;
+
+        // Picking up set point (Relative to start facing forwards)
         public static final int armDownSetPoint = -800;
 
+        // In case arm gearing changes
         public static final DcMotor.Direction armDirection = DcMotor.Direction.FORWARD;
     }
 
@@ -65,12 +74,15 @@ public class Constants {
     }
 
     public static class OdometryConstants {
+
+        // Constants about physical robot
         public static final double wheelDiameterMM = 48;
         public static final double ticksInRotation = 2000;
         public static final double wheelCircumferenceMM = wheelDiameterMM * Math.PI;
         public static final double tickInMM = wheelCircumferenceMM / ticksInRotation;
 
-        public static final double TRACK_WIDTH = 1;
-        public static final double FORWARD_OFFSET = 1;
+        // Track width and forward offset are for odometer. Currently just place holders
+        public static final double TRACK_WIDTH = -1;
+        public static final double FORWARD_OFFSET = -1;
     }
 }
