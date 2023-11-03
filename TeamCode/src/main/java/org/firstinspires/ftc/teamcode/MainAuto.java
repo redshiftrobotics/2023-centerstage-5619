@@ -54,20 +54,6 @@ public class MainAuto extends LinearOpMode {
         centerEncoder.setDirection(DcMotorSimple.Direction.FORWARD);
         rightEncoder.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        arm = hardwareMap.get(DcMotor.class, "top arm");
-
-        // Set arm motor mode
-        arm.setDirection(Constants.ArmConstants.armDirection);
-
-        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        arm.setPower(Constants.ArmConstants.armPower);
-
-        int targetArmPosition = 0;
-
-        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        arm.setTargetPosition(targetArmPosition);
-        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -88,11 +74,9 @@ public class MainAuto extends LinearOpMode {
         rightBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
 
 
-        final double power = (inchesToGo > 0 ? 1 : -1) * 0.25;
+        final double power = (inchesToGo > 0 ? 1 : -1) * Constants.AutoConstants.AUTO_DRIVE_POWER;
 
-        final double buffer = 1.1;
-
-        final double distanceUntilStop = Math.abs(inchesToGo) - buffer;
+        final double distanceUntilStop = Math.abs(inchesToGo) - Constants.AutoConstants.MOVEMENT_BUFFER_INCHES;
 
         leftFrontDrive.setPower(power);
         rightFrontDrive.setPower(power);
@@ -103,6 +87,9 @@ public class MainAuto extends LinearOpMode {
         final double startInchesR = ticksToInch(rightEncoder.getCurrentPosition());
 
         double change = 0;
+
+        telemetry.addData("Raw Encoder Inches", "Left: %4.2f, Right: %4.2f", startInchesL, startInchesR);
+        telemetry.addData("Change Inches", "Change: %4.2f, Target: %4.2f", change, distanceUntilStop);
 
         while (change < distanceUntilStop) {
             final double currentInchesL = ticksToInch(leftEncoder.getCurrentPosition());
@@ -133,7 +120,7 @@ public class MainAuto extends LinearOpMode {
         return (ticks * Constants.OdometryConstants.tickInMM) / 25.4;
     }
 
-    public void driveDirections(double axial, double lateral, double yaw, int time) {
+    public void driveDirectionTime(double axial, double lateral, double yaw, int time) {
         // Combine joystick requests for each axis-motion to determine each wheel's power.
         double leftFrontPower = axial + lateral + yaw;
         double rightFrontPower = axial - lateral - yaw;
@@ -159,7 +146,6 @@ public class MainAuto extends LinearOpMode {
         rightFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
         rightBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
 
-
         leftFrontDrive.setPower(leftFrontPower);
         rightFrontDrive.setPower(rightFrontPower);
         leftBackDrive.setPower(leftBackPower);
@@ -167,7 +153,7 @@ public class MainAuto extends LinearOpMode {
 
         final double endTime = runtime.now(TimeUnit.SECONDS) + time;
         while (runtime.now(TimeUnit.SECONDS) < endTime) {
-            telemetry.addData("Time Left", runtime.now(TimeUnit.SECONDS) - endTime);
+            telemetry.addData("Time Left", endTime - runtime.now(TimeUnit.SECONDS));
             telemetry.update();
         }
 

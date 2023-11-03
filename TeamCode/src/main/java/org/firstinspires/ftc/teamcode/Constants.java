@@ -85,4 +85,13 @@ public class Constants {
         public static final double TRACK_WIDTH = -1;
         public static final double FORWARD_OFFSET = -1;
     }
+
+    public static class AutoConstants {
+
+        // How far the robot will keep on rolling after braking. Gotten though trial and error and will change based on AUTO_DRIVE_POWER, robot weight, etc.
+        public static final double MOVEMENT_BUFFER_INCHES = 1.1;
+
+        // How fast to spin motors while going specified distances in auto. The slower you go the more precise your distance will be.
+        public static final double AUTO_DRIVE_POWER = 0.25;
+    }
 }
