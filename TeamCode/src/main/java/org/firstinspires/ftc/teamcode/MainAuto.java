@@ -54,7 +54,7 @@ public class MainAuto extends LinearOpMode {
         centerEncoder.setDirection(DcMotorSimple.Direction.FORWARD);
         rightEncoder.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        telemetry.addData("Status", "Initialized");
+        telemetry.addData("Status", "Initialized").setRetained(true);
         telemetry.update();
 
         waitForStart();
@@ -100,6 +100,7 @@ public class MainAuto extends LinearOpMode {
 
             change = Math.abs((changeL + changeR) / 2);
 
+            telemetry.addData("Status", "Run Time: %s", runtime.toString());
             telemetry.addData("Encoder Inches", "Left: %4.2f, Right: %4.2f", currentInchesL, currentInchesR);
             telemetry.addData("Change Inches", "Change: %4.2f, Target: %4.2f", change, distanceUntilStop);
             telemetry.update();
@@ -114,6 +115,56 @@ public class MainAuto extends LinearOpMode {
         leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        telemetry.clear();
+    }
+
+    public void driveRightInches(double inchesToGo) {
+        if (inchesToGo == 0) return;
+
+        leftFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+        leftBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+        rightFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+        rightBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+
+        final double power = (inchesToGo > 0 ? 1 : -1) * Constants.AutoConstants.AUTO_DRIVE_POWER;
+
+        final double distanceUntilStop = Math.abs(inchesToGo) - Constants.AutoConstants.MOVEMENT_BUFFER_INCHES;
+
+        leftFrontDrive.setPower(-power);
+        rightFrontDrive.setPower(power);
+        leftBackDrive.setPower(power);
+        rightBackDrive.setPower(-power);
+
+        final double startInches = ticksToInch(centerEncoder.getCurrentPosition());
+
+        double change = 0;
+
+        telemetry.addData("Raw Encoder Inches", "Center: %4.2f", startInches);
+        telemetry.addData("Change Inches", "Change: %4.2f, Target: %4.2f", change, distanceUntilStop);
+
+        while (change < distanceUntilStop) {
+            final double currentInches = ticksToInch(centerEncoder.getCurrentPosition());
+
+            change = Math.abs(currentInches - startInches);
+
+            telemetry.addData("Status", "Run Time: %s", runtime.toString());
+            telemetry.addData("Encoder Inches", "Center: %4.2f", currentInches);
+            telemetry.addData("Change Inches", "Change: %4.2f, Target: %4.2f", change, distanceUntilStop);
+            telemetry.update();
+        }
+
+        leftFrontDrive.setPower(0);
+        rightFrontDrive.setPower(0);
+        leftBackDrive.setPower(0);
+        rightBackDrive.setPower(0);
+
+        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        telemetry.clear();
     }
 
     public double ticksToInch(int ticks) {
@@ -151,9 +202,13 @@ public class MainAuto extends LinearOpMode {
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
 
-        final double endTime = runtime.now(TimeUnit.SECONDS) + time;
+        double now = runtime.now(TimeUnit.SECONDS);
+        final double endTime = now + time;
         while (runtime.now(TimeUnit.SECONDS) < endTime) {
-            telemetry.addData("Time Left", endTime - runtime.now(TimeUnit.SECONDS));
+            now = runtime.now(TimeUnit.SECONDS);
+
+            telemetry.addData("Status", "Run Time: %s", runtime.toString());
+            telemetry.addData("Time Left", endTime - now);
             telemetry.update();
         }
 
@@ -166,5 +221,7 @@ public class MainAuto extends LinearOpMode {
         leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        telemetry.clear();
     }
 }
