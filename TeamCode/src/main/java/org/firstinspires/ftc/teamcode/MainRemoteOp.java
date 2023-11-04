@@ -152,6 +152,7 @@ public class MainRemoteOp extends LinearOpMode {
             rightBackDrive.setPower(rightBackPower);
 
             // Send target position for arm
+            telemetry.addData("Arm position", "Position: %d", targetArmPosition);
             arm.setTargetPosition(targetArmPosition);
 
             // Run time telemetry, mostly just to check if the program is running all right.
