@@ -13,21 +13,20 @@ public class Constants {
         public static final int armMoveAmount = 3;
 
         // If a new starting position for arm is decided, change this variable
-        public static final int armLocationShift = 0;
-
         // Minimum position the arm can go to (Relative to start facing forwards)
         //public static final int minPosition = -900 + armLocationShift;
-        public static final int minPosition = 0 + armLocationShift;
-        // Maximum position the arm can go to (Relative to start facing forwards)
-       // public static final int maxPosition = 3800 + armLocationShift;
-        public static final int maxPosition = 4250 + armLocationShift;
-        // Placing set point (Relative to start facing forwards)
-       // public static final int armUpSetPoint = 2000 + armLocationShift;
-        public static final int armUpSetPoint = 2800 + armLocationShift;
 
-        // Picking up set point (Relative to start facing forwards)
-        //public static final int armDownSetPoint = -800 + armLocationShift;
-        public static final int armDownSetPoint = 0 + armLocationShift;
+        // Maximum position the arm can go to (Relative to start facing forwards)
+        public static final int minPosition = 0;
+
+        // Placing set point (Relative to start)
+        public static final int maxPosition = 4250;
+
+        // Placing set point (Relative to start)
+        public static final int armUpSetPoint = 2800;
+
+        // Picking up set point (Relative to start)
+        public static final int armDownSetPoint = 0;
 
         // In case arm gearing changes
         public static final DcMotor.Direction armDirection = DcMotor.Direction.FORWARD;
@@ -86,8 +85,8 @@ public class Constants {
         public static final double tickInMM = wheelCircumferenceMM / ticksInRotation;
 
         // Track width and forward offset are for odometer. Currently just place holders
-        public static final double TRACK_WIDTH = -1;
-        public static final double FORWARD_OFFSET = -1;
+        public static final double TRACK_WIDTH = 457.2;
+        public static final double FORWARD_OFFSET = 215.9;
     }
 
     public static class AutoConstants {
