@@ -5,8 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Const;
-
 @TeleOp(name = "Main Remote")
 public class MainRemoteOp extends LinearOpMode {
 
@@ -159,8 +157,8 @@ public class MainRemoteOp extends LinearOpMode {
 
             // Drive telemetry
             telemetry.addData("Speed Modifiers", "Linear: %.0f%%, Angular: %.0f%%", linearSpeedModifier * 100, angularSpeedModifier * 100);
-            telemetry.addData("Front", "Left: %4.2f, Right: %4.2f", leftFrontPower, rightFrontPower);
-            telemetry.addData("Back ", "Left: %4.2f, Right: %4.2f", leftBackPower, rightBackPower);
+            telemetry.addData("Front Power", "Left: %4.2f, Right: %4.2f", leftFrontPower, rightFrontPower);
+            telemetry.addData("Back Power", "Left: %4.2f, Right: %4.2f", leftBackPower, rightBackPower);
 
             // Arm telemetry
             telemetry.addData("Arm Position", "Current: %d, Target: %d", arm.getCurrentPosition(), targetArmPosition);

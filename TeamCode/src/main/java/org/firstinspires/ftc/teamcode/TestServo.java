@@ -2,21 +2,24 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-@TeleOp(name = "TestMotor")
+import com.qualcomm.robotcore.hardware.Servo;
+
+@TeleOp(name = "TestServo")
 @Disabled
-public class TestMotor extends LinearOpMode {
-    private DcMotor motor;
+public class TestServo extends LinearOpMode {
+    private Servo servo;
+
     @Override
     public void runOpMode() {
-        motor = hardwareMap.get(DcMotor.class, "motor");
+        servo = hardwareMap.get(Servo.class, "servo");
+        servo.resetDeviceConfigurationForOpMode();
 
         waitForStart();
-        while (opModeIsActive()) {
-            motor.setPower(0.5);
-            telemetry.addData("Motor Position", motor.getCurrentPosition());
-            telemetry.update();
 
+        while (opModeIsActive()) {
+            servo.setPosition(0);
+            telemetry.addData("Servo Position", servo.getPosition());
+            telemetry.update();
         }
     }
 }

@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "Odometry Test")
-@Disabled
 public class RemoteOdometryTest extends LinearOpMode {
 
     private final ElapsedTime runtime = new ElapsedTime();
@@ -140,13 +139,11 @@ public class RemoteOdometryTest extends LinearOpMode {
 
             telemetry.addData("Status", "Run Time: %s", runtime.toString());
 
+            telemetry.addData("Position", "X: %d, Y: %d, Heading: %d", ticksToInches(xPos), ticksToInches(yPos), ticksToInches(heading));
+            telemetry.addData("Pod Individual", "Left: %d, Center: %d, Right: %d", ticksToInches(leftEncoderPos), ticksToInches(centerEncoderPos), ticksToInches(rightEncoderPos));
+
             telemetry.addData("Front Power", "Left: %4.2f, Right: %4.2f", leftFrontPower, rightFrontPower);
             telemetry.addData("Back Power", "Left: %4.2f, Right: %4.2f", leftBackPower, rightBackPower);
-
-            telemetry.addData("Position", "X: %d, Y: %d, Heading: %d", ticksToInches(xPos), ticksToInches(yPos), ticksToInches(heading));
-            telemetry.addData("Delta", "X: %d, Y: %d, Heading: %d", ticksToInches(deltaX), ticksToInches(deltaY), ticksToInches(phi));
-
-            telemetry.addData("Pod Individual", "Left: %d, Center: %d, Right: %d", ticksToInches(leftEncoderPos), ticksToInches(centerEncoderPos), ticksToInches(rightEncoderPos));
 
 
             telemetry.update();

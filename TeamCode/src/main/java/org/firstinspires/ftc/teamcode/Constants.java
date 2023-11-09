@@ -85,8 +85,8 @@ public class Constants {
         public static final double tickInMM = wheelCircumferenceMM / ticksInRotation;
 
         // Track width and forward offset are for odometer. Currently just place holders
-        public static final double TRACK_WIDTH = 457.2;
-        public static final double FORWARD_OFFSET = 215.9;
+        public static final double TRACK_WIDTH = 177.8 / tickInMM;
+        public static final double FORWARD_OFFSET = 69.596 / tickInMM;
     }
 
     public static class AutoConstants {
