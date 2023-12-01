@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name = "Main Remote")
 public class MainRemoteOp extends LinearOpMode {
@@ -17,12 +19,19 @@ public class MainRemoteOp extends LinearOpMode {
 
     private DcMotor arm;
 
+    private  CRServo intakeServo;
+
+    private Servo dropperServo;
+
+
     @Override
     public void runOpMode() {
         leftFrontDrive = hardwareMap.get(DcMotor.class, "FL");
         leftBackDrive = hardwareMap.get(DcMotor.class, "BL");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "FR");
         rightBackDrive = hardwareMap.get(DcMotor.class, "BR");
+
+        intakeServo = hardwareMap.get(CRServo.class, "intake");
 
         // Set if motor is reversed
         leftFrontDrive.setDirection(Constants.DriveTrainConstants.leftFrontDriveDirection);
@@ -60,6 +69,10 @@ public class MainRemoteOp extends LinearOpMode {
         boolean isSlowMode = false;
         boolean lastBState = false;
 
+        int intakeSpin = 0;
+        boolean lastIntakeButtonState = false;
+        boolean lastReverseIntakeButtonState = false;
+
         while (opModeIsActive()) {
             // Check if slow mode is enabled and check if it should toggle on or if it must be held
             if (Constants.DriverConstants.slowModeIsToggleMode) {
@@ -69,6 +82,18 @@ public class MainRemoteOp extends LinearOpMode {
                 isSlowMode = gamepad1.b;
             }
             lastBState = gamepad1.b;
+
+            if (Constants.DriverConstants.grabberSpinIsToggleMode) {
+                if (gamepad1.dpad_left && !lastIntakeButtonState) intakeSpin = (intakeSpin == 1) ? 0 : 1;
+                if (gamepad1.dpad_right && !lastReverseIntakeButtonState) intakeSpin = (intakeSpin == -1) ? 0 : -1;
+
+            }
+            else {
+                intakeSpin = (gamepad1.dpad_left ? 0 : 1) - (gamepad1.dpad_right ? 0 : 1);
+            }
+            lastIntakeButtonState = gamepad1.dpad_left;
+            lastReverseIntakeButtonState = gamepad1.dpad_right;
+
 
             // Check which speed modifier mode to be in. Speed modifies just change joystick input
             // Pressing down on stick bumps it up a mode, slow mode bumps it down one, default is middle (1)
@@ -152,6 +177,9 @@ public class MainRemoteOp extends LinearOpMode {
             // Send target position for arm
             arm.setTargetPosition(targetArmPosition);
 
+            // Send power to intake servo
+            intakeServo.setPower(intakeSpin * Constants.ArmConstants.intakePower);
+
             // Run time telemetry, mostly just to check if the program is running all right.
             telemetry.addData("Status", "Run Time: %s", runtime.toString());
 
@@ -162,6 +190,8 @@ public class MainRemoteOp extends LinearOpMode {
 
             // Arm telemetry
             telemetry.addData("Arm Position", "Current: %d, Target: %d", arm.getCurrentPosition(), targetArmPosition);
+
+            telemetry.addData("Intake Power", "Current: %s, Target: %s", intakeServo.getPower(), intakeSpin);
 
             telemetry.update();
         }

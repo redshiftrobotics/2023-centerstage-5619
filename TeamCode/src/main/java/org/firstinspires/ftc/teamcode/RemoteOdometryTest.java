@@ -139,7 +139,7 @@ public class RemoteOdometryTest extends LinearOpMode {
 
             telemetry.addData("Status", "Run Time: %s", runtime.toString());
 
-            telemetry.addData("Position", "X: %d, Y: %d, Heading: %d", ticksToInches(xPos), ticksToInches(yPos), ticksToInches(heading));
+            telemetry.addData("Position", "X: %d, Y: %d, Heading: %d", ticksToInches(xPos), ticksToInches(yPos), heading);
             telemetry.addData("Pod Individual", "Left: %d, Center: %d, Right: %d", ticksToInches(leftEncoderPos), ticksToInches(centerEncoderPos), ticksToInches(rightEncoderPos));
 
             telemetry.addData("Front Power", "Left: %4.2f, Right: %4.2f", leftFrontPower, rightFrontPower);

@@ -6,7 +6,9 @@ public class Constants {
     public static class ArmConstants {
         // What power level the amr is set to. Between 0 and 1 with one being max power.
         // This does not control directly speed, it controls how much power the motor will use to get to a desired position
-        public static  final double armPower = 1;
+        public static final double armPower = 1;
+
+        public static final double intakePower = 1;
 
         // How many encoder ticks the arm moves each time button is pressed.
         // Do not set this to high otherwise the arm may keep on moving even after you stop holding button.
@@ -71,6 +73,9 @@ public class Constants {
 
         // If slowModeIsToggleMode is true then slow mode will be toggled on and off, if it is false then you have to hold slow mode button.
         public static final boolean slowModeIsToggleMode = true;
+
+        // If grabberSpinIsToggleMode is true then spin state mode will be toggled forward, backward and off, if it is false then you have to hold up/down button.
+        public static final boolean grabberSpinIsToggleMode = true;
 
         // How far trigger needs to be pressed to activate
         public static final double triggerThreshold = 0.9;
