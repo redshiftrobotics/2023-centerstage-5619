@@ -3,7 +3,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class Constants {
 
-    // All constants relating to Auto
     public static class AutoConstants {
 
         // How far the robot will keep on rolling after braking. Gotten though trial and error and will change based on AUTO_DRIVE_POWER, robot weight, etc.
@@ -12,12 +11,14 @@ public class Constants {
         // How fast to spin motors while going specified distances in auto. The slower you go the more precise your distance will be.
         public static final double AUTO_DRIVE_POWER = 0.25;
 
-        // Down position for tile dropper
-        public static final double DOWN_DROPPER_POSITION = 0;
+        // Down position for tile dropper, currently a guess
+        public static final double DOWN_DROPPER_POSITION = 100;
 
-        // Down position for tile dropper
+        // up position for tile dropper
         public static final double UP_DROPPER_POSITION = 0;
 
+        // arm position close enough
+        public static final double ARM_POSITION_RANGE = 5;
     }
 
     // Constants related to driver preference
