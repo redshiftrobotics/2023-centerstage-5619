@@ -19,7 +19,7 @@ public class MainRemoteOp extends LinearOpMode {
 
     private DcMotor arm;
 
-    private  CRServo intakeServo;
+    private CRServo intakeServo;
 
     private Servo dropperServo;
 
@@ -32,6 +32,7 @@ public class MainRemoteOp extends LinearOpMode {
         rightBackDrive = hardwareMap.get(DcMotor.class, "BR");
 
         intakeServo = hardwareMap.get(CRServo.class, "intake");
+        dropperServo = hardwareMap.get(Servo.class, "dropper");
 
         // Set if motor is reversed
         leftFrontDrive.setDirection(Constants.DriveTrainConstants.leftFrontDriveDirection);
@@ -191,7 +192,7 @@ public class MainRemoteOp extends LinearOpMode {
             // Arm telemetry
             telemetry.addData("Arm Position", "Current: %d, Target: %d", arm.getCurrentPosition(), targetArmPosition);
 
-            telemetry.addData("Intake Power", "Current: %s, Target: %s", intakeServo.getPower(), intakeSpin);
+            telemetry.addData("Intake Power", "Current: %s", intakeServo.getPower());
 
             telemetry.update();
         }
