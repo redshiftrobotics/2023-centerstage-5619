@@ -12,7 +12,7 @@ public class Constants {
         public static final double AUTO_DRIVE_POWER = 0.25;
 
         // Down position for tile dropper, currently a guess
-        public static final double DOWN_DROPPER_POSITION = 100;
+        public static final double DOWN_DROPPER_POSITION = 1;
 
         // up position for tile dropper
         public static final double UP_DROPPER_POSITION = 0;

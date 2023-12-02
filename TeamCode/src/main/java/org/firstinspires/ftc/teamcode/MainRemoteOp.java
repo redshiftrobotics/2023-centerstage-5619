@@ -78,24 +78,29 @@ public class MainRemoteOp extends LinearOpMode {
             // Check if slow mode is enabled and check if it should toggle on or if it must be held
             if (Constants.DriverConstants.slowModeIsToggleMode) {
                 if (gamepad1.b && !lastBState) isSlowMode = !isSlowMode;
-            }
-            else {
+            } else {
                 isSlowMode = gamepad1.b;
             }
             lastBState = gamepad1.b;
 
             if (Constants.DriverConstants.grabberSpinIsToggleMode) {
-                if (gamepad1.dpad_left && !lastIntakeButtonState) intakeSpin = (intakeSpin == 1) ? 0 : 1;
-                if (gamepad1.dpad_right && !lastReverseIntakeButtonState) intakeSpin = (intakeSpin == -1) ? 0 : -1;
+                if (gamepad1.dpad_left && !lastIntakeButtonState)
+                    intakeSpin = (intakeSpin == 1) ? 0 : 1;
+                if (gamepad1.dpad_right && !lastReverseIntakeButtonState)
+                    intakeSpin = (intakeSpin == -1) ? 0 : -1;
 
-            }
-            else {
+            } else {
                 intakeSpin = (gamepad1.dpad_left ? 0 : 1) - (gamepad1.dpad_right ? 0 : 1);
             }
             lastIntakeButtonState = gamepad1.dpad_left;
             lastReverseIntakeButtonState = gamepad1.dpad_right;
 
-
+            if (gamepad1.y) {
+                dropperDown();
+            }
+            if (gamepad1.x) {
+                dropperUp();
+            }
             // Check which speed modifier mode to be in. Speed modifies just change joystick input
             // Pressing down on stick bumps it up a mode, slow mode bumps it down one, default is middle (1)
             final int linearSpeedMode = 1 + (gamepad1.left_stick_button ? 1 : 0) - (isSlowMode ? 1 : 0);
@@ -115,7 +120,7 @@ public class MainRemoteOp extends LinearOpMode {
             final double yaw = gamepad1.right_stick_x * angularSpeedModifier;
 
             // "ark" allows you to spin backward around a point, allowing you to turn around while still moving
-            
+
             double frontArk = gamepad1.right_stick_y * angularSpeedModifier;
             if (!Constants.DriverConstants.enableArk || Math.abs(frontArk) < Constants.DriverConstants.arkPowerThreshHold * angularSpeedModifier)
                 frontArk = 0;
@@ -151,8 +156,7 @@ public class MainRemoteOp extends LinearOpMode {
                 leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
                 rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
                 rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            }
-            else {
+            } else {
                 leftFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
                 leftBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
                 rightFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
@@ -161,12 +165,16 @@ public class MainRemoteOp extends LinearOpMode {
 
             // Up on dpad to move target position up.
             // Down on dpad to move it down.
-            if (gamepad1.dpad_up) targetArmPosition = Math.min(targetArmPosition + Constants.ArmConstants.armMoveAmount, Constants.ArmConstants.maxPosition);
-            if (gamepad1.dpad_down) targetArmPosition = Math.max((targetArmPosition - Constants.ArmConstants.armMoveAmount), Constants.ArmConstants.minPosition);
+            if (gamepad1.dpad_up)
+                targetArmPosition = Math.min(targetArmPosition + Constants.ArmConstants.armMoveAmount, Constants.ArmConstants.maxPosition);
+            if (gamepad1.dpad_down)
+                targetArmPosition = Math.max((targetArmPosition - Constants.ArmConstants.armMoveAmount), Constants.ArmConstants.minPosition);
 
             // Move to set points if triggers
-            if (gamepad1.left_trigger > Constants.DriverConstants.triggerThreshold) targetArmPosition = Constants.ArmConstants.armUpSetPoint;
-            if (gamepad1.right_trigger > Constants.DriverConstants.triggerThreshold) targetArmPosition = Constants.ArmConstants.armDownSetPoint;
+            if (gamepad1.left_trigger > Constants.DriverConstants.triggerThreshold)
+                targetArmPosition = Constants.ArmConstants.armUpSetPoint;
+            if (gamepad1.right_trigger > Constants.DriverConstants.triggerThreshold)
+                targetArmPosition = Constants.ArmConstants.armDownSetPoint;
 
 
             // Send power to wheels
@@ -198,4 +206,13 @@ public class MainRemoteOp extends LinearOpMode {
         }
 
     }
+
+    public void dropperUp() {
+        dropperServo.setPosition(Constants.AutoConstants.UP_DROPPER_POSITION);
+    }
+
+    public void dropperDown() {
+        dropperServo.setPosition(Constants.AutoConstants.DOWN_DROPPER_POSITION);
+    }
 }
+
