@@ -108,10 +108,14 @@ public class AutoBlueFar extends LinearOpMode {
              *     public static class AutoConstants
              *         public static final double DOWN_DROPPER_POSITION = 100;
              */
+            setArmPosition(100);
 
             // turn left.
             driveForwardInches(26);
             driveLeftInches(90);
+
+
+            dropperDown();
         }
         resetArm();
     }

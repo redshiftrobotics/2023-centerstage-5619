@@ -12,10 +12,13 @@ public class Constants {
         public static final double AUTO_DRIVE_POWER = 0.25;
 
         // Down position for tile dropper, currently a guess
-        public static final double DOWN_DROPPER_POSITION = 1;
+        public static final double DOWN_DROPPER_POSITION = -0.5;
 
         // up position for tile dropper
-        public static final double UP_DROPPER_POSITION = 0;
+        public static final double UP_DROPPER_POSITION = 0.25;
+
+        public static final double RELEASE_AIRPLANE_POSITION = 0.5;
+
 
         // arm position close enough
         public static final double ARM_POSITION_RANGE = 5;
@@ -64,7 +67,7 @@ public class Constants {
         public static final double armPower = 1;
 
         // Power of intake motor (spinning device on grabber)
-        public static final double intakePower = 1;
+        public static final double intakePower = 0.5;
 
         // How many encoder ticks the arm moves each time button is pressed.
         // Do not set this to high otherwise the arm may keep on moving even after you stop holding button.

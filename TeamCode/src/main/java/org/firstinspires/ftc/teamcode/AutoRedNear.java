@@ -108,6 +108,7 @@ public class AutoRedNear extends LinearOpMode {
              *         public static final double DOWN_DROPPER_POSITION = 100;
              */
 
+            setArmPosition(100);
 
             telemetry.addData("Status", "Run Time: %s", runtime.toString());
 
@@ -115,6 +116,9 @@ public class AutoRedNear extends LinearOpMode {
 
             driveRightInches(50);
           //  driveForwardInches(12);
+
+
+            dropperDown();
         }
         resetArm();
     }

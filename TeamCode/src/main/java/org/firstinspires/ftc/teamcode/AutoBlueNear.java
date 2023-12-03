@@ -78,6 +78,7 @@ public class AutoBlueNear extends LinearOpMode {
         waitForStart();
         runtime.reset();
         if (opModeIsActive()) {
+            setArmPosition(100);
             /** New Functions to use
              *
              * Arm Related:
@@ -114,6 +115,8 @@ public class AutoBlueNear extends LinearOpMode {
 
             driveLeftInches(50);
           //  driveForwardInches(12);
+
+            dropperDown();
         }
         resetArm();
     }

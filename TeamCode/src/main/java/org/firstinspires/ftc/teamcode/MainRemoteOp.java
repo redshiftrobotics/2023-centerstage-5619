@@ -23,6 +23,8 @@ public class MainRemoteOp extends LinearOpMode {
 
     private Servo dropperServo;
 
+    private Servo airplaneServo;
+
 
     @Override
     public void runOpMode() {
@@ -33,6 +35,7 @@ public class MainRemoteOp extends LinearOpMode {
 
         intakeServo = hardwareMap.get(CRServo.class, "intake");
         dropperServo = hardwareMap.get(Servo.class, "dropper");
+        airplaneServo = hardwareMap.get(Servo.class, "airplane");
 
         // Set if motor is reversed
         leftFrontDrive.setDirection(Constants.DriveTrainConstants.leftFrontDriveDirection);
@@ -95,11 +98,8 @@ public class MainRemoteOp extends LinearOpMode {
             lastIntakeButtonState = gamepad1.dpad_left;
             lastReverseIntakeButtonState = gamepad1.dpad_right;
 
-            if (gamepad1.y) {
-                dropperDown();
-            }
-            if (gamepad1.x) {
-                dropperUp();
+            if (gamepad1.right_bumper) {
+                airplaneServo.setPosition(Constants.AutoConstants.RELEASE_AIRPLANE_POSITION);
             }
             // Check which speed modifier mode to be in. Speed modifies just change joystick input
             // Pressing down on stick bumps it up a mode, slow mode bumps it down one, default is middle (1)
@@ -165,10 +165,25 @@ public class MainRemoteOp extends LinearOpMode {
 
             // Up on dpad to move target position up.
             // Down on dpad to move it down.
+
             if (gamepad1.dpad_up)
                 targetArmPosition = Math.min(targetArmPosition + Constants.ArmConstants.armMoveAmount, Constants.ArmConstants.maxPosition);
             if (gamepad1.dpad_down)
                 targetArmPosition = Math.max((targetArmPosition - Constants.ArmConstants.armMoveAmount), Constants.ArmConstants.minPosition);
+
+//            if (gamepad1.dpad_up) {
+//                targetArmPosition += Constants.ArmConstants.armMoveAmount;
+//            }
+//            else {
+//                targetArmPosition -= Constants.ArmConstants.armMoveAmount;
+//            }
+
+//            if (targetArmPosition > Constants.ArmConstants.maxPosition && !gamepad1.left_bumper) {
+//                targetArmPosition = Constants.ArmConstants.maxPosition;
+//            }
+//            if (targetArmPosition < Constants.ArmConstants.minPosition && !gamepad1.left_bumper) {
+//                targetArmPosition = Constants.ArmConstants.maxPosition;
+//            }
 
             // Move to set points if triggers
             if (gamepad1.left_trigger > Constants.DriverConstants.triggerThreshold)
@@ -201,6 +216,8 @@ public class MainRemoteOp extends LinearOpMode {
             telemetry.addData("Arm Position", "Current: %d, Target: %d", arm.getCurrentPosition(), targetArmPosition);
 
             telemetry.addData("Intake Power", "Current: %s", intakeServo.getPower());
+            telemetry.addData("Dropper Position", "Current: %s", dropperServo.getPosition());
+
 
             telemetry.update();
         }
