@@ -111,12 +111,12 @@ public class MainRemoteOp extends LinearOpMode {
             // Left joystick does linear movement / translation (forward, backward, left, right, diagonals)
             // Right joystick does angular movement / rotation (spinning in place and arks).
 
-            // "axial" is determined by the left stick's y-axis and controls forward and backward motion
-            // "lateral" is determined by the left stick's x-axis and controls strafing motion (sideways movement)
+            // "forward" is determined by the left stick's y-axis and controls forward and backward motion
+            // "strafe" is determined by the left stick's x-axis and controls strafing motion (sideways movement)
             // "yaw" is determined by the right stick's x-axis and controls the rotation of the robot
 
-            final double axial = -gamepad1.left_stick_y * linearSpeedModifier;
-            final double lateral = gamepad1.left_stick_x * linearSpeedModifier;
+            final double forward = -gamepad1.left_stick_y * linearSpeedModifier;
+            final double strafe = gamepad1.left_stick_x * linearSpeedModifier;
             final double yaw = gamepad1.right_stick_x * angularSpeedModifier;
 
             // "ark" allows you to spin backward around a point, allowing you to turn around while still moving
@@ -127,10 +127,10 @@ public class MainRemoteOp extends LinearOpMode {
 
 
             // Combine joystick requests for each axis-motion to determine each wheel's power.
-            double leftFrontPower = axial + lateral + yaw + frontArk;
-            double rightFrontPower = axial - lateral - yaw - frontArk;
-            double leftBackPower = axial - lateral + yaw;
-            double rightBackPower = axial + lateral - yaw;
+            double leftFrontPower = forward + strafe + yaw + frontArk;
+            double rightFrontPower = forward - strafe - yaw - frontArk;
+            double leftBackPower = forward - strafe + yaw;
+            double rightBackPower = forward + strafe - yaw;
 
 
             // Find highest power so we can check if it exceeds the max
@@ -173,16 +173,15 @@ public class MainRemoteOp extends LinearOpMode {
 
 //            if (gamepad1.dpad_up) {
 //                targetArmPosition += Constants.ArmConstants.armMoveAmount;
+//                if (targetArmPosition > Constants.ArmConstants.maxPosition && !gamepad1.left_bumper) {
+//                    targetArmPosition = Constants.ArmConstants.maxPosition;
+//                }
 //            }
-//            else {
+//            if (gamepad1.dpad_down) {
 //                targetArmPosition -= Constants.ArmConstants.armMoveAmount;
-//            }
-
-//            if (targetArmPosition > Constants.ArmConstants.maxPosition && !gamepad1.left_bumper) {
-//                targetArmPosition = Constants.ArmConstants.maxPosition;
-//            }
-//            if (targetArmPosition < Constants.ArmConstants.minPosition && !gamepad1.left_bumper) {
-//                targetArmPosition = Constants.ArmConstants.maxPosition;
+//                if (targetArmPosition < Constants.ArmConstants.minPosition && !gamepad1.left_bumper) {
+//                    targetArmPosition = Constants.ArmConstants.maxPosition;
+//                }
 //            }
 
             // Move to set points if triggers
