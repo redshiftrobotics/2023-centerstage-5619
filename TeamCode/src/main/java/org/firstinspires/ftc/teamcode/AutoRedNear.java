@@ -123,6 +123,14 @@ public class AutoRedNear extends LinearOpMode {
         resetArm();
     }
 
+    public static void sleep(double seconds) {
+        try {
+            Thread.sleep(Math.round(seconds * 1000.0));
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
     public void driveForwardInches(double inchesToGo) {
         if (inchesToGo == 0) return;
 

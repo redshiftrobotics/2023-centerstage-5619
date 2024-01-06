@@ -120,7 +120,14 @@ public class AutoBlueFar extends LinearOpMode {
         resetArm();
     }
 
-
+    public static void sleep(double seconds) {
+        try {
+            Thread.sleep(Math.round(seconds * 1000.0));
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+    
     /** Set the arms position, returns immediately, returns true if position is allowed  */
     public boolean setArmPosition(int position) {
         if (position > Constants.ArmConstants.maxPosition || position < Constants.ArmConstants.minPosition) return false;
