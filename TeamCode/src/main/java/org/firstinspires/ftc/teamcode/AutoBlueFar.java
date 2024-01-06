@@ -108,19 +108,32 @@ public class AutoBlueFar extends LinearOpMode {
              *     public static class AutoConstants
              *         public static final double DOWN_DROPPER_POSITION = 100;
              */
+
+//            Wait 15 seconds before moving
+//            waitSeconds(15);
+
             setArmPosition(100);
 
             // turn left.
             driveForwardInches(26);
             driveLeftInches(90);
 
+//            put arm to up position (same as trigger)
+//            setArmToPickupPositionAndWait();
 
-            dropperDown();
+//            put arm in custom up position
+//            setArmPositionAndWait(2000);
+
+//            spin intake in reverse, drop backer back down, and stop intake
+//            enableReverseIntake();
+//
+//            dropperDown();
+//            stopIntake();
         }
         resetArm();
     }
 
-    public static void sleep(double seconds) {
+    public static void waitSeconds(double seconds) {
         try {
             Thread.sleep(Math.round(seconds * 1000.0));
         } catch (InterruptedException e) {

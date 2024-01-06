@@ -113,6 +113,9 @@ public class AutoBlueNear extends LinearOpMode {
 
             // turn left.
 
+//            waitSeconds(15);
+
+
             driveLeftInches(50);
           //  driveForwardInches(12);
 
