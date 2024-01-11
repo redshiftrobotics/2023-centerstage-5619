@@ -118,6 +118,8 @@ public class AutoRedFar extends LinearOpMode {
             driveRightInches(90);
           //  driveForwardInches(12);
 
+            // Turn 90 to the right
+
 
             dropperDown();
         }

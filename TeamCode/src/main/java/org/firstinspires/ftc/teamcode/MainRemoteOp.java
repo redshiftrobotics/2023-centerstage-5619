@@ -53,7 +53,6 @@ public class MainRemoteOp extends LinearOpMode {
 
         // Set arm motor mode
         arm.setDirection(Constants.ArmConstants.armDirection);
-
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         arm.setPower(Constants.ArmConstants.armPower);
 
