@@ -10,21 +10,21 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.concurrent.TimeUnit;
 
-@Autonomous(name = "AutoBlueNear")
-public class AutoBlueNear extends LinearOpMode {
+@Autonomous(name = "experimentBlueNear")
+public class ExperimentBlueNear extends LinearOpMode {
 
     private final ElapsedTime runtime = new ElapsedTime();
 
-    private DcMotor leftFrontDrive;
-    private DcMotor leftBackDrive;
-    private DcMotor rightFrontDrive;
-    private DcMotor rightBackDrive;
+//    private DcMotor leftFrontDrive;
+//    private DcMotor leftBackDrive;
+//    private DcMotor rightFrontDrive;
+//    private DcMotor rightBackDrive;
 
-    private DcMotor leftEncoder;
-    private DcMotor centerEncoder;
-    private DcMotor rightEncoder;
+//    private DcMotor leftEncoder;
+//    private DcMotor centerEncoder;
+//    private DcMotor rightEncoder;
 
-    private Servo dropperServo;
+ //   private Servo dropperServo;
     private CRServo intakeServo;
 
 
@@ -32,30 +32,30 @@ public class AutoBlueNear extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        leftFrontDrive = hardwareMap.get(DcMotor.class, "FL");
-        leftBackDrive = hardwareMap.get(DcMotor.class, "BL");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "FR");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "BR");
-
-        // Set if motor is reversed
-        leftFrontDrive.setDirection(Constants.DriveTrainConstants.leftFrontDriveDirection);
-        leftBackDrive.setDirection(Constants.DriveTrainConstants.leftBackDriveDirection);
-        rightFrontDrive.setDirection(Constants.DriveTrainConstants.rightFrontDriveDirection);
-        rightBackDrive.setDirection(Constants.DriveTrainConstants.rightBackDriveDirection);
+//        leftFrontDrive = hardwareMap.get(DcMotor.class, "FL");
+//        leftBackDrive = hardwareMap.get(DcMotor.class, "BL");
+//        rightFrontDrive = hardwareMap.get(DcMotor.class, "FR");
+//        rightBackDrive = hardwareMap.get(DcMotor.class, "BR");
+//
+//        // Set if motor is reversed
+//        leftFrontDrive.setDirection(Constants.DriveTrainConstants.leftFrontDriveDirection);
+//        leftBackDrive.setDirection(Constants.DriveTrainConstants.leftBackDriveDirection);
+//        rightFrontDrive.setDirection(Constants.DriveTrainConstants.rightFrontDriveDirection);
+//        rightBackDrive.setDirection(Constants.DriveTrainConstants.rightBackDriveDirection);
 
         // Enable or disable braking
-        leftFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-        leftBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-        rightFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-        rightBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-
-        leftEncoder = hardwareMap.get(DcMotor.class, "LE");
-        centerEncoder = hardwareMap.get(DcMotor.class, "CE");
-        rightEncoder = hardwareMap.get(DcMotor.class, "RE");
-
-        leftEncoder.setDirection(DcMotorSimple.Direction.FORWARD);
-        centerEncoder.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightEncoder.setDirection(DcMotorSimple.Direction.REVERSE);
+//        leftFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+//        leftBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+//        rightFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+//        rightBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+//
+//        leftEncoder = hardwareMap.get(DcMotor.class, "LE");
+//        centerEncoder = hardwareMap.get(DcMotor.class, "CE");
+//        rightEncoder = hardwareMap.get(DcMotor.class, "RE");
+//
+//        leftEncoder.setDirection(DcMotorSimple.Direction.FORWARD);
+//        centerEncoder.setDirection(DcMotorSimple.Direction.FORWARD);
+//        rightEncoder.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Initialize arm.
         arm = hardwareMap.get(DcMotor.class, "top arm");
@@ -67,7 +67,7 @@ public class AutoBlueNear extends LinearOpMode {
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         intakeServo = hardwareMap.get(CRServo.class, "intake");
-        dropperServo = hardwareMap.get(Servo.class, "dropper");
+     //   dropperServo = hardwareMap.get(Servo.class, "dropper");
 
         telemetry.addData("Status", "Initialized").setRetained(true);
         telemetry.update();
@@ -108,51 +108,40 @@ public class AutoBlueNear extends LinearOpMode {
 
             telemetry.addData("Status", "Run Time: %s", runtime.toString());
 
+           // int intakeSpin = 1; //(gamepad1.dpad_left ? 0 : 1) - (gamepad1.dpad_right ? 0 : 1);
+            //intakeServo.setPower(intakeSpin * Constants.ArmConstants.intakePower);
+
+
             // turn left.
 
-            telemetry.addData("Status", "Starting to wait");
-            telemetry.update();
-            waitSeconds(5);
-            telemetry.addData("Status", "done waiting");
-            telemetry.update();
+//            telemetry.addData("Status", "Starting to wait");
+//            telemetry.update();
+//            waitSeconds(5);
+//            telemetry.addData("Status", "done waiting");
+//            telemetry.update();
 
-            driveLeftInches(26);
-            driveForwardInches(-30);
-            //  driveForwardInches(12);
+     //       driveLeftInches(26);
+      //      driveForwardInches(-30);
+          //  driveForwardInches(12);
 
             // move the arm.
-            telemetry.addData("Status", "about to move arm.");
-            while (opModeIsActive()) {
+//            telemetry.addData("Status", "about to move arm.");
+//            setArmPosition(Constants.ArmConstants.armUpSetPoint);
+//            telemetry.addData("Status", "finished moving arm.");
 
-                setArmPosition(Constants.ArmConstants.armUpSetPoint);
-                waitSeconds(5);
-                break;
+            while (opModeIsActive()) {
+                arm.setPower(0.5);
+                arm.setTargetPosition(3306);
+                //arm.setTargetPosition(-1000);
             }
 
-//
-//                try {
-//                    TimeUnit.SECONDS.sleep(5);
-//                }
-//                catch (InterruptedException error) {
-//                    while (opModeIsActive()) {
-//                        telemetry.addData("Error: ", error);
-//                    }
-//                    return;
-//                }
-
-            driveForwardInches(5);
-            driveRightInches(24);
-            driveForwardInches(-10);
-
-        // this code doesn't do anything right now.
-        telemetry.addData("Status", "finished moving arm.");
-            while (opModeIsActive()) {
-                setArmPosition(0); // sally says this should be a negative number.
-                break;
-            }
+//            while (opModeIsActive()) {
+//                arm.setPower(0.5);
+//                arm.setTargetPosition(1000);
+//            }
         }
 
-        resetArm();
+        //resetArm();
     }
 
     public static void sleep(double seconds) {
@@ -257,160 +246,160 @@ public class AutoBlueNear extends LinearOpMode {
         telemetry.clear();
     }
 
-    public void dropperUp() {
-        dropperServo.setPosition(Constants.AutoConstants.UP_DROPPER_POSITION);
-    }
-
-    public void dropperDown() {
-        dropperServo.setPosition(Constants.AutoConstants.DOWN_DROPPER_POSITION);
-    }
+//    public void dropperUp() {
+//      //  dropperServo.setPosition(Constants.AutoConstants.UP_DROPPER_POSITION);
+//    }
+//
+//    public void dropperDown() {
+//        dropperServo.setPosition(Constants.AutoConstants.DOWN_DROPPER_POSITION);
+//    }
 
     public void driveForwardInches(double inchesToGo) {
         if (inchesToGo == 0) return;
 
-        leftFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-        leftBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-        rightFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-        rightBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+//        leftFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+//        leftBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+//        rightFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+//        rightBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
 
 
         final double power = (inchesToGo > 0 ? 1 : -1) * Constants.AutoConstants.AUTO_DRIVE_POWER;
 
         final double distanceUntilStop = Math.abs(inchesToGo) - Constants.AutoConstants.MOVEMENT_BUFFER_INCHES;
 
-        leftFrontDrive.setPower(power);
-        rightFrontDrive.setPower(power);
-        leftBackDrive.setPower(power);
-        rightBackDrive.setPower(power);
-
-        final double startInchesL = ticksToInch(leftEncoder.getCurrentPosition());
-        final double startInchesR = ticksToInch(rightEncoder.getCurrentPosition());
+//        leftFrontDrive.setPower(power);
+//        rightFrontDrive.setPower(power);
+//        leftBackDrive.setPower(power);
+//        rightBackDrive.setPower(power);
+//
+//        final double startInchesL = ticksToInch(leftEncoder.getCurrentPosition());
+//        final double startInchesR = ticksToInch(rightEncoder.getCurrentPosition());
 
         double change = 0;
 
-        telemetry.addData("Raw Encoder Inches", "Left: %4.2f, Right: %4.2f", startInchesL, startInchesR);
+      //  telemetry.addData("Raw Encoder Inches", "Left: %4.2f, Right: %4.2f", startInchesL, startInchesR);
         telemetry.addData("Change Inches", "Change: %4.2f, Target: %4.2f", change, distanceUntilStop);
 
-        while (change < distanceUntilStop) {
-            final double currentInchesL = ticksToInch(leftEncoder.getCurrentPosition());
-            final double currentInchesR = ticksToInch(rightEncoder.getCurrentPosition());
+//        while (change < distanceUntilStop) {
+//            final double currentInchesL = ticksToInch(leftEncoder.getCurrentPosition());
+//            final double currentInchesR = ticksToInch(rightEncoder.getCurrentPosition());
+//
+//            final double changeL = currentInchesL - startInchesL;
+//            final double changeR = currentInchesR - startInchesR;
 
-            final double changeL = currentInchesL - startInchesL;
-            final double changeR = currentInchesR - startInchesR;
-
-            change = Math.abs((changeL + changeR) / 2);
+        //    change = Math.abs((changeL + changeR) / 2);
 
             telemetry.addData("Status", "Run Time: %s", runtime.toString());
-            telemetry.addData("Encoder Inches", "Left: %4.2f, Right: %4.2f", currentInchesL, currentInchesR);
+        //    telemetry.addData("Encoder Inches", "Left: %4.2f, Right: %4.2f", currentInchesL, currentInchesR);
             telemetry.addData("Change Inches", "Change: %4.2f, Target: %4.2f", change, distanceUntilStop);
             telemetry.update();
         }
 
-        leftFrontDrive.setPower(0);
-        rightFrontDrive.setPower(0);
-        leftBackDrive.setPower(0);
-        rightBackDrive.setPower(0);
+//        leftFrontDrive.setPower(0);
+//        rightFrontDrive.setPower(0);
+//        leftBackDrive.setPower(0);
+//        rightBackDrive.setPower(0);
+//
+//        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//
+//        telemetry.clear();
 
-        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        telemetry.clear();
-    }
 
     public void driveLeftInches(double inchesToGo) {
         if (inchesToGo == 0) return;
 
-        leftFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-        leftBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-        rightFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-        rightBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+//        leftFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+//        leftBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+//        rightFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+//        rightBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
 
         final double power = (inchesToGo > 0 ? 1 : -1) * Constants.AutoConstants.AUTO_DRIVE_POWER;
 
         final double distanceUntilStop = Math.abs(inchesToGo) - Constants.AutoConstants.MOVEMENT_BUFFER_INCHES;
 
-        leftFrontDrive.setPower(-power);
-        rightFrontDrive.setPower(power);
-        leftBackDrive.setPower(power);
-        rightBackDrive.setPower(-power);
+//        leftFrontDrive.setPower(-power);
+//        rightFrontDrive.setPower(power);
+//        leftBackDrive.setPower(power);
+//        rightBackDrive.setPower(-power);
 
-        final double startInches = ticksToInch(centerEncoder.getCurrentPosition());
+     //   final double startInches = ticksToInch(centerEncoder.getCurrentPosition());
 
         double change = 0;
 
-        telemetry.addData("Raw Encoder Inches", "Center: %4.2f", startInches);
+     //   telemetry.addData("Raw Encoder Inches", "Center: %4.2f", startInches);
         telemetry.addData("Change Inches", "Change: %4.2f, Target: %4.2f", change, distanceUntilStop);
 
         while (change < distanceUntilStop) {
-            final double currentInches = ticksToInch(centerEncoder.getCurrentPosition());
+        //    final double currentInches = ticksToInch(centerEncoder.getCurrentPosition());
 
-            change = Math.abs(currentInches - startInches);
+        //    change = Math.abs(currentInches - startInches);
 
             telemetry.addData("Status", "Run Time: %s", runtime.toString());
-            telemetry.addData("Encoder Inches", "Center: %4.2f", currentInches);
+         //   telemetry.addData("Encoder Inches", "Center: %4.2f", currentInches);
             telemetry.addData("Change Inches", "Change: %4.2f, Target: %4.2f", change, distanceUntilStop);
             telemetry.update();
         }
 
-        leftFrontDrive.setPower(0);
-        rightFrontDrive.setPower(0);
-        leftBackDrive.setPower(0);
-        rightBackDrive.setPower(0);
-
-        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        telemetry.clear();
+//        leftFrontDrive.setPower(0);
+//        rightFrontDrive.setPower(0);
+//        leftBackDrive.setPower(0);
+//        rightBackDrive.setPower(0);
+//
+//        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//
+//        telemetry.clear();
     }
 
     public void driveRightInches(double inchesToGo) {
         if (inchesToGo == 0) return;
 
-        leftFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-        leftBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-        rightFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-        rightBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+//        leftFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+//        leftBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+//        rightFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+//        rightBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
 
         final double power = (inchesToGo > 0 ? 1 : -1) * Constants.AutoConstants.AUTO_DRIVE_POWER;
 
         final double distanceUntilStop = Math.abs(inchesToGo) - Constants.AutoConstants.MOVEMENT_BUFFER_INCHES;
+//
+//        leftFrontDrive.setPower(power);
+//        rightFrontDrive.setPower(-power);
+//        leftBackDrive.setPower(-power);
+//        rightBackDrive.setPower(power);
 
-        leftFrontDrive.setPower(power);
-        rightFrontDrive.setPower(-power);
-        leftBackDrive.setPower(-power);
-        rightBackDrive.setPower(power);
-
-        final double startInches = ticksToInch(centerEncoder.getCurrentPosition());
+       // final double startInches = ticksToInch(centerEncoder.getCurrentPosition());
 
         double change = 0;
 
-        telemetry.addData("Raw Encoder Inches", "Center: %4.2f", startInches);
+     //   telemetry.addData("Raw Encoder Inches", "Center: %4.2f", startInches);
         telemetry.addData("Change Inches", "Change: %4.2f, Target: %4.2f", change, distanceUntilStop);
 
         while (change < distanceUntilStop) {
-            final double currentInches = ticksToInch(centerEncoder.getCurrentPosition());
+     //       final double currentInches = ticksToInch(centerEncoder.getCurrentPosition());
 
-            change = Math.abs(currentInches - startInches);
+      //      change = Math.abs(currentInches - startInches);
 
             telemetry.addData("Status", "Run Time: %s", runtime.toString());
-            telemetry.addData("Encoder Inches", "Center: %4.2f", currentInches);
+       //     telemetry.addData("Encoder Inches", "Center: %4.2f", currentInches);
             telemetry.addData("Change Inches", "Change: %4.2f, Target: %4.2f", change, distanceUntilStop);
             telemetry.update();
         }
-
-        leftFrontDrive.setPower(0);
-        rightFrontDrive.setPower(0);
-        leftBackDrive.setPower(0);
-        rightBackDrive.setPower(0);
-
-        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//
+//        leftFrontDrive.setPower(0);
+//        rightFrontDrive.setPower(0);
+//        leftBackDrive.setPower(0);
+//        rightBackDrive.setPower(0);
+//
+//        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         telemetry.clear();
     }
@@ -440,15 +429,15 @@ public class AutoBlueNear extends LinearOpMode {
             rightBackPower /= maxPower;
         }
 
-        leftFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-        leftBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-        rightFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-        rightBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-
-        leftFrontDrive.setPower(leftFrontPower);
-        rightFrontDrive.setPower(rightFrontPower);
-        leftBackDrive.setPower(leftBackPower);
-        rightBackDrive.setPower(rightBackPower);
+//        leftFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+//        leftBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+//        rightFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+//        rightBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+//
+//        leftFrontDrive.setPower(leftFrontPower);
+//        rightFrontDrive.setPower(rightFrontPower);
+//        leftBackDrive.setPower(leftBackPower);
+//        rightBackDrive.setPower(rightBackPower);
 
         double now = runtime.now(TimeUnit.SECONDS);
         final double endTime = now + time;
@@ -460,15 +449,15 @@ public class AutoBlueNear extends LinearOpMode {
             telemetry.update();
         }
 
-        leftFrontDrive.setPower(0);
-        rightFrontDrive.setPower(0);
-        leftBackDrive.setPower(0);
-        rightBackDrive.setPower(0);
-
-        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        leftFrontDrive.setPower(0);
+//        rightFrontDrive.setPower(0);
+//        leftBackDrive.setPower(0);
+//        rightBackDrive.setPower(0);
+//
+//        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         telemetry.clear();
     }
