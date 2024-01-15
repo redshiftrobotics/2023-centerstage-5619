@@ -110,19 +110,49 @@ public class AutoRedNear extends LinearOpMode {
 
 //            waitSeconds(15);
 
-            setArmPosition(100);
+         //   setArmPosition(100);
 
             telemetry.addData("Status", "Run Time: %s", runtime.toString());
 
             // turn left.
 
-            driveRightInches(50);
+           // driveRightInches(50);
           //  driveForwardInches(12);
+            driveRightInches(26);
+            driveForwardInches(-35);
+            //  driveForwardInches(12);
+            // move the arm.
+
+            telemetry.addData("Status", "about to move arm.");
+            while (opModeIsActive()) {
+                setArmPosition(3200); //Constants.ArmConstants.armUpSetPoint);
+
+                //setArmPosition(Constants.ArmConstants.armUpSetPoint);
+                waitSeconds(5);
+                // setArmPosition(Constants.ArmConstants.armDownSetPoint);
+                setArmPosition(0);
+                setArmPosition(0);
+
+                break;
+            }
 
 
-            dropperDown();
+            driveForwardInches(5);
+            driveLeftInches(24);
+            driveForwardInches(-15);
+
+
+           // dropperDown();
         }
         resetArm();
+    }
+
+    public static void waitSeconds(double seconds) {
+        try {
+            Thread.sleep(Math.round(seconds * 1000.0));
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     public static void sleep(double seconds) {

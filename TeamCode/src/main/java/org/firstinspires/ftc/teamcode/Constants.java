@@ -9,7 +9,7 @@ public class Constants {
         public static final double MOVEMENT_BUFFER_INCHES = 1.1;
 
         // How fast to spin motors while going specified distances in auto. The slower you go the more precise your distance will be.
-        public static final double AUTO_DRIVE_POWER = 0.25;
+        public static final double AUTO_DRIVE_POWER = 0.5;// 0.25;
 
         // Down position for tile dropper, currently a guess
         public static final double DOWN_DROPPER_POSITION = -0.5;
@@ -17,7 +17,7 @@ public class Constants {
         // up position for tile dropper
         public static final double UP_DROPPER_POSITION = 0.25;
 
-        public static final double RELEASE_AIRPLANE_POSITION = 0.5;
+        public static final double RELEASE_AIRPLANE_POSITION = -0.75;
 
 
         // arm position close enough

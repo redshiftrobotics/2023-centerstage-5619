@@ -112,44 +112,40 @@ public class AutoBlueNear extends LinearOpMode {
 
             telemetry.addData("Status", "Starting to wait");
             telemetry.update();
-            waitSeconds(5);
+            waitSeconds(15);
             telemetry.addData("Status", "done waiting");
             telemetry.update();
 
             driveLeftInches(26);
-            driveForwardInches(-30);
+            driveForwardInches(-32);
             //  driveForwardInches(12);
 
             // move the arm.
             telemetry.addData("Status", "about to move arm.");
             while (opModeIsActive()) {
+                setArmPosition(3200); //Constants.ArmConstants.armUpSetPoint);
 
-                setArmPosition(Constants.ArmConstants.armUpSetPoint);
-                waitSeconds(5);
+               // setArmPosition(Constants.ArmConstants.armUpSetPoint);
+                waitSeconds(2);
+               // setArmPosition(Constants.ArmConstants.armDownSetPoint);
+                setArmPosition(0);
+                setArmPosition(0);
+
                 break;
             }
-
-//
-//                try {
-//                    TimeUnit.SECONDS.sleep(5);
-//                }
-//                catch (InterruptedException error) {
-//                    while (opModeIsActive()) {
-//                        telemetry.addData("Error: ", error);
-//                    }
-//                    return;
-//                }
 
             driveForwardInches(5);
             driveRightInches(24);
-            driveForwardInches(-10);
+            driveForwardInches(-15);
 
-        // this code doesn't do anything right now.
-        telemetry.addData("Status", "finished moving arm.");
-            while (opModeIsActive()) {
-                setArmPosition(0); // sally says this should be a negative number.
-                break;
-            }
+//        // this code doesn't do anything right now.
+//        telemetry.addData("Status", "finished moving arm.");
+//            while (opModeIsActive()) {
+//                //setArmPosition(Constants.ArmConstants.armDownSetPoint);
+//
+//                //setArmPosition(1000); // sally says this should be a negative number.
+//                break;
+//            }
         }
 
         resetArm();

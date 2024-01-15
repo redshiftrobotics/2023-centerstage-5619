@@ -112,11 +112,35 @@ public class AutoBlueFar extends LinearOpMode {
 //            Wait 15 seconds before moving
 //            waitSeconds(15);
 
-            setArmPosition(100);
+          //  setArmPosition(100);
 
             // turn left.
-            driveForwardInches(26);
-            driveLeftInches(90);
+//            driveForwardInches(26);
+//            driveLeftInches(90);
+
+            // New movement.
+            waitSeconds(10);
+            driveLeftInches(25);
+            driveForwardInches(-86);
+            //  driveForwardInches(12);
+
+            // move the arm.
+            telemetry.addData("Status", "about to move arm.");
+            while (opModeIsActive()) {
+                setArmPosition(3200); //Constants.ArmConstants.armUpSetPoint);
+
+                //setArmPosition(Constants.ArmConstants.armUpSetPoint);
+                waitSeconds(2);
+                // setArmPosition(Constants.ArmConstants.armDownSetPoint);
+                setArmPosition(0);
+
+                break;
+            }
+
+            driveForwardInches(5);
+            driveRightInches(24);
+            driveForwardInches(-15);
+
 
 //            put arm to up position (same as trigger)
 //            setArmToPickupPositionAndWait();
@@ -147,6 +171,55 @@ public class AutoBlueFar extends LinearOpMode {
         arm.setTargetPosition(position);
         return true;
     }
+
+    public void driveRightInches(double inchesToGo) {
+        if (inchesToGo == 0) return;
+
+        leftFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+        leftBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+        rightFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+        rightBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+
+        final double power = (inchesToGo > 0 ? 1 : -1) * Constants.AutoConstants.AUTO_DRIVE_POWER;
+
+        final double distanceUntilStop = Math.abs(inchesToGo) - Constants.AutoConstants.MOVEMENT_BUFFER_INCHES;
+
+        leftFrontDrive.setPower(power);
+        rightFrontDrive.setPower(-power);
+        leftBackDrive.setPower(-power);
+        rightBackDrive.setPower(power);
+
+        final double startInches = ticksToInch(centerEncoder.getCurrentPosition());
+
+        double change = 0;
+
+        telemetry.addData("Raw Encoder Inches", "Center: %4.2f", startInches);
+        telemetry.addData("Change Inches", "Change: %4.2f, Target: %4.2f", change, distanceUntilStop);
+
+        while (change < distanceUntilStop) {
+            final double currentInches = ticksToInch(centerEncoder.getCurrentPosition());
+
+            change = Math.abs(currentInches - startInches);
+
+            telemetry.addData("Status", "Run Time: %s", runtime.toString());
+            telemetry.addData("Encoder Inches", "Center: %4.2f", currentInches);
+            telemetry.addData("Change Inches", "Change: %4.2f, Target: %4.2f", change, distanceUntilStop);
+            telemetry.update();
+        }
+
+        leftFrontDrive.setPower(0);
+        rightFrontDrive.setPower(0);
+        leftBackDrive.setPower(0);
+        rightBackDrive.setPower(0);
+
+        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        telemetry.clear();
+    }
+
 
     public void setArmPositionUnsafe(int position) {
         arm.setTargetPosition(position);

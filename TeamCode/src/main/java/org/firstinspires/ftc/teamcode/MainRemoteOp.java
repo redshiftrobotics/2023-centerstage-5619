@@ -98,7 +98,14 @@ public class MainRemoteOp extends LinearOpMode {
             lastReverseIntakeButtonState = gamepad1.dpad_right;
 
             if (gamepad1.right_bumper) {
+                //airplaneServo.setDirection(Servo.Direction.FORWARD);
                 airplaneServo.setPosition(Constants.AutoConstants.RELEASE_AIRPLANE_POSITION);
+                //airplaneServo.setDirection(Servo.Direction.REVERSE);
+
+                //airplaneServo.setPosition(Constants.AutoConstants.RELEASE_AIRPLANE_POSITION);
+
+                //airplaneServo.setPower(Constants.AutoConstants.RELEASE_AIRPLANE_POSITION);
+
             }
             // Check which speed modifier mode to be in. Speed modifies just change joystick input
             // Pressing down on stick bumps it up a mode, slow mode bumps it down one, default is middle (1)

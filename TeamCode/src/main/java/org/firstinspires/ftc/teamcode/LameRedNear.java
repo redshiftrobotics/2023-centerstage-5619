@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.concurrent.TimeUnit;
 
-@Autonomous(name = "AutoRedFar")
-public class AutoRedFar extends LinearOpMode {
+@Autonomous(name = "LameRedNear")
+public class LameRedNear extends LinearOpMode {
 
     private final ElapsedTime runtime = new ElapsedTime();
 
@@ -27,13 +27,7 @@ public class AutoRedFar extends LinearOpMode {
     private Servo dropperServo;
     private CRServo intakeServo;
 
-    public static void waitSeconds(double seconds) {
-        try {
-            Thread.sleep(Math.round(seconds * 1000.0));
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
+
     private DcMotor arm;
 
     @Override
@@ -113,39 +107,51 @@ public class AutoRedFar extends LinearOpMode {
              *     public static class AutoConstants
              *         public static final double DOWN_DROPPER_POSITION = 100;
              */
-            waitSeconds(13);
-           // waitForStart();
 
-          //  setArmPosition(100);
+//            waitSeconds(15);
+
+         //   setArmPosition(100);
 
             telemetry.addData("Status", "Run Time: %s", runtime.toString());
+
             // turn left.
-            driveRightInches(25);
-            waitSeconds(2);
-            driveForwardInches(-87);
-            telemetry.addData("Status", "about to move arm.");
-            while (opModeIsActive()) {
 
-                setArmPosition(3200); //Constants.ArmConstants.armUpSetPoint);
-                waitSeconds(5);
-                // setArmPosition(Constants.ArmConstants.armDownSetPoint);
-                setArmPosition(0);
-
-                break;
-            }
-
-            driveForwardInches(5);
-            driveLeftInches(25);
-            driveForwardInches(-10);
-
+           // driveRightInches(50);
+          //  driveForwardInches(12);
+           // driveRightInches(26);
+            driveForwardInches(-32);
             //  driveForwardInches(12);
+            // move the arm.
 
-            // Turn 90 to the right
-
+//            telemetry.addData("Status", "about to move arm.");
+//            while (opModeIsActive()) {
+//
+//                setArmPosition(Constants.ArmConstants.armUpSetPoint);
+//                waitSeconds(5);
+//                // setArmPosition(Constants.ArmConstants.armDownSetPoint);
+//                setArmPosition(0);
+//                setArmPosition(0);
+//
+//                break;
+//            }
+//
+//
+//            driveForwardInches(5);
+//            driveLeftInches(24);
+//            driveForwardInches(-15);
+//
 
            // dropperDown();
         }
         resetArm();
+    }
+
+    public static void waitSeconds(double seconds) {
+        try {
+            Thread.sleep(Math.round(seconds * 1000.0));
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     public static void sleep(double seconds) {
@@ -155,6 +161,110 @@ public class AutoRedFar extends LinearOpMode {
             Thread.currentThread().interrupt();
         }
     }
+
+    public void driveForwardInches(double inchesToGo) {
+        if (inchesToGo == 0) return;
+
+        leftFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+        leftBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+        rightFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+        rightBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+
+
+        final double power = (inchesToGo > 0 ? 1 : -1) * Constants.AutoConstants.AUTO_DRIVE_POWER;
+
+        final double distanceUntilStop = Math.abs(inchesToGo) - Constants.AutoConstants.MOVEMENT_BUFFER_INCHES;
+
+        leftFrontDrive.setPower(power);
+        rightFrontDrive.setPower(power);
+        leftBackDrive.setPower(power);
+        rightBackDrive.setPower(power);
+
+        final double startInchesL = ticksToInch(leftEncoder.getCurrentPosition());
+        final double startInchesR = ticksToInch(rightEncoder.getCurrentPosition());
+
+        double change = 0;
+
+        telemetry.addData("Raw Encoder Inches", "Left: %4.2f, Right: %4.2f", startInchesL, startInchesR);
+        telemetry.addData("Change Inches", "Change: %4.2f, Target: %4.2f", change, distanceUntilStop);
+
+        while (change < distanceUntilStop) {
+            final double currentInchesL = ticksToInch(leftEncoder.getCurrentPosition());
+            final double currentInchesR = ticksToInch(rightEncoder.getCurrentPosition());
+
+            final double changeL = currentInchesL - startInchesL;
+            final double changeR = currentInchesR - startInchesR;
+
+            change = Math.abs((changeL + changeR) / 2);
+
+            telemetry.addData("Status", "Run Time: %s", runtime.toString());
+            telemetry.addData("Encoder Inches", "Left: %4.2f, Right: %4.2f", currentInchesL, currentInchesR);
+            telemetry.addData("Change Inches", "Change: %4.2f, Target: %4.2f", change, distanceUntilStop);
+            telemetry.update();
+        }
+
+        leftFrontDrive.setPower(0);
+        rightFrontDrive.setPower(0);
+        leftBackDrive.setPower(0);
+        rightBackDrive.setPower(0);
+
+        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        telemetry.clear();
+    }
+
+    public void driveLeftInches(double inchesToGo) {
+        if (inchesToGo == 0) return;
+
+        leftFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+        leftBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+        rightFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+        rightBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
+
+        final double power = (inchesToGo > 0 ? 1 : -1) * Constants.AutoConstants.AUTO_DRIVE_POWER;
+
+        final double distanceUntilStop = Math.abs(inchesToGo) - Constants.AutoConstants.MOVEMENT_BUFFER_INCHES;
+
+        leftFrontDrive.setPower(-power);
+        rightFrontDrive.setPower(power);
+        leftBackDrive.setPower(power);
+        rightBackDrive.setPower(-power);
+
+        final double startInches = ticksToInch(centerEncoder.getCurrentPosition());
+
+        double change = 0;
+
+        telemetry.addData("Raw Encoder Inches", "Center: %4.2f", startInches);
+        telemetry.addData("Change Inches", "Change: %4.2f, Target: %4.2f", change, distanceUntilStop);
+
+        while (change < distanceUntilStop) {
+            final double currentInches = ticksToInch(centerEncoder.getCurrentPosition());
+
+            change = Math.abs(currentInches - startInches);
+
+            telemetry.addData("Status", "Run Time: %s", runtime.toString());
+            telemetry.addData("Encoder Inches", "Center: %4.2f", currentInches);
+            telemetry.addData("Change Inches", "Change: %4.2f, Target: %4.2f", change, distanceUntilStop);
+            telemetry.update();
+        }
+
+        leftFrontDrive.setPower(0);
+        rightFrontDrive.setPower(0);
+        leftBackDrive.setPower(0);
+        rightBackDrive.setPower(0);
+
+        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        telemetry.clear();
+    }
+
+
 
     /** Set the arms position, returns immediately, returns true if position is allowed  */
     public boolean setArmPosition(int position) {
@@ -250,61 +360,6 @@ public class AutoRedFar extends LinearOpMode {
         dropperServo.setPosition(Constants.AutoConstants.DOWN_DROPPER_POSITION);
     }
 
-    public void driveForwardInches(double inchesToGo) {
-        if (inchesToGo == 0) return;
-
-        leftFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-        leftBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-        rightFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-        rightBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-
-
-        final double power = (inchesToGo > 0 ? 1 : -1) * Constants.AutoConstants.AUTO_DRIVE_POWER;
-
-        final double distanceUntilStop = Math.abs(inchesToGo) - Constants.AutoConstants.MOVEMENT_BUFFER_INCHES;
-
-        leftFrontDrive.setPower(power);
-        rightFrontDrive.setPower(power);
-        leftBackDrive.setPower(power);
-        rightBackDrive.setPower(power);
-
-        final double startInchesL = ticksToInch(leftEncoder.getCurrentPosition());
-        final double startInchesR = ticksToInch(rightEncoder.getCurrentPosition());
-
-        double change = 0;
-
-        telemetry.addData("Raw Encoder Inches", "Left: %4.2f, Right: %4.2f", startInchesL, startInchesR);
-        telemetry.addData("Change Inches", "Change: %4.2f, Target: %4.2f", change, distanceUntilStop);
-
-        while (change < distanceUntilStop) {
-            final double currentInchesL = ticksToInch(leftEncoder.getCurrentPosition());
-            final double currentInchesR = ticksToInch(rightEncoder.getCurrentPosition());
-
-            final double changeL = currentInchesL - startInchesL;
-            final double changeR = currentInchesR - startInchesR;
-
-            change = Math.abs((changeL + changeR) / 2);
-
-            telemetry.addData("Status", "Run Time: %s", runtime.toString());
-            telemetry.addData("Encoder Inches", "Left: %4.2f, Right: %4.2f", currentInchesL, currentInchesR);
-            telemetry.addData("Change Inches", "Change: %4.2f, Target: %4.2f", change, distanceUntilStop);
-            telemetry.update();
-        }
-
-        leftFrontDrive.setPower(0);
-        rightFrontDrive.setPower(0);
-        leftBackDrive.setPower(0);
-        rightBackDrive.setPower(0);
-
-        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        telemetry.clear();
-    }
-
-
     public void driveRightInches(double inchesToGo) {
         if (inchesToGo == 0) return;
 
@@ -352,54 +407,6 @@ public class AutoRedFar extends LinearOpMode {
 
         telemetry.clear();
     }
-    public void driveLeftInches(double inchesToGo) {
-        if (inchesToGo == 0) return;
-
-        leftFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-        leftBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-        rightFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-        rightBackDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
-
-        final double power = (inchesToGo > 0 ? 1 : -1) * Constants.AutoConstants.AUTO_DRIVE_POWER;
-
-        final double distanceUntilStop = Math.abs(inchesToGo) - Constants.AutoConstants.MOVEMENT_BUFFER_INCHES;
-
-        leftFrontDrive.setPower(-power);
-        rightFrontDrive.setPower(power);
-        leftBackDrive.setPower(power);
-        rightBackDrive.setPower(-power);
-
-        final double startInches = ticksToInch(centerEncoder.getCurrentPosition());
-
-        double change = 0;
-
-        telemetry.addData("Raw Encoder Inches", "Center: %4.2f", startInches);
-        telemetry.addData("Change Inches", "Change: %4.2f, Target: %4.2f", change, distanceUntilStop);
-
-        while (change < distanceUntilStop) {
-            final double currentInches = ticksToInch(centerEncoder.getCurrentPosition());
-
-            change = Math.abs(currentInches - startInches);
-
-            telemetry.addData("Status", "Run Time: %s", runtime.toString());
-            telemetry.addData("Encoder Inches", "Center: %4.2f", currentInches);
-            telemetry.addData("Change Inches", "Change: %4.2f, Target: %4.2f", change, distanceUntilStop);
-            telemetry.update();
-        }
-
-        leftFrontDrive.setPower(0);
-        rightFrontDrive.setPower(0);
-        leftBackDrive.setPower(0);
-        rightBackDrive.setPower(0);
-
-        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        telemetry.clear();
-    }
-
     public double ticksToInch(int ticks) {
         return (ticks * Constants.OdometryConstants.tickInMM) / 25.4;
     }

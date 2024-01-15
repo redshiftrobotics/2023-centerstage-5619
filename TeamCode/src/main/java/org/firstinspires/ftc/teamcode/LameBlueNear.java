@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.concurrent.TimeUnit;
 
-@Autonomous(name = "AutoRedFar")
-public class AutoRedFar extends LinearOpMode {
+@Autonomous(name = "LameBlueNear")
+public class LameBlueNear extends LinearOpMode {
 
     private final ElapsedTime runtime = new ElapsedTime();
 
@@ -27,13 +27,7 @@ public class AutoRedFar extends LinearOpMode {
     private Servo dropperServo;
     private CRServo intakeServo;
 
-    public static void waitSeconds(double seconds) {
-        try {
-            Thread.sleep(Math.round(seconds * 1000.0));
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
+
     private DcMotor arm;
 
     @Override
@@ -63,14 +57,11 @@ public class AutoRedFar extends LinearOpMode {
         centerEncoder.setDirection(DcMotorSimple.Direction.FORWARD);
         rightEncoder.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        // Initialize arm.
         arm = hardwareMap.get(DcMotor.class, "top arm");
-
-        // Set arm motor mode
         arm.setDirection(Constants.ArmConstants.armDirection);
-
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         arm.setPower(Constants.ArmConstants.armPower);
-
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setTargetPosition(0);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -113,42 +104,61 @@ public class AutoRedFar extends LinearOpMode {
              *     public static class AutoConstants
              *         public static final double DOWN_DROPPER_POSITION = 100;
              */
-            waitSeconds(13);
-           // waitForStart();
 
-          //  setArmPosition(100);
 
             telemetry.addData("Status", "Run Time: %s", runtime.toString());
+
             // turn left.
-            driveRightInches(25);
-            waitSeconds(2);
-            driveForwardInches(-87);
-            telemetry.addData("Status", "about to move arm.");
-            while (opModeIsActive()) {
 
-                setArmPosition(3200); //Constants.ArmConstants.armUpSetPoint);
-                waitSeconds(5);
-                // setArmPosition(Constants.ArmConstants.armDownSetPoint);
-                setArmPosition(0);
+            telemetry.addData("Status", "Starting to wait");
+            telemetry.update();
+            waitSeconds(15);
+            telemetry.addData("Status", "done waiting");
+            telemetry.update();
 
-                break;
-            }
-
-            driveForwardInches(5);
-            driveLeftInches(25);
-            driveForwardInches(-10);
-
+          //  driveLeftInches(26);
+            driveForwardInches(-32);
             //  driveForwardInches(12);
 
-            // Turn 90 to the right
+            // move the arm.
+//            telemetry.addData("Status", "about to move arm.");
+//            while (opModeIsActive()) {
+//
+//                setArmPosition(Constants.ArmConstants.armUpSetPoint);
+//                waitSeconds(2);
+//               // setArmPosition(Constants.ArmConstants.armDownSetPoint);
+//                setArmPosition(0);
+//                setArmPosition(0);
+//
+//                break;
+//            }
+//
+//            driveForwardInches(5);
+//            driveRightInches(24);
+//            driveForwardInches(-15);
 
-
-           // dropperDown();
+//        // this code doesn't do anything right now.
+//        telemetry.addData("Status", "finished moving arm.");
+//            while (opModeIsActive()) {
+//                //setArmPosition(Constants.ArmConstants.armDownSetPoint);
+//
+//                //setArmPosition(1000); // sally says this should be a negative number.
+//                break;
+//            }
         }
+
         resetArm();
     }
 
     public static void sleep(double seconds) {
+        try {
+            Thread.sleep(Math.round(seconds * 1000.0));
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    public static void waitSeconds(double seconds) {
         try {
             Thread.sleep(Math.round(seconds * 1000.0));
         } catch (InterruptedException e) {
@@ -304,8 +314,7 @@ public class AutoRedFar extends LinearOpMode {
         telemetry.clear();
     }
 
-
-    public void driveRightInches(double inchesToGo) {
+    public void driveLeftInches(double inchesToGo) {
         if (inchesToGo == 0) return;
 
         leftFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
@@ -317,10 +326,10 @@ public class AutoRedFar extends LinearOpMode {
 
         final double distanceUntilStop = Math.abs(inchesToGo) - Constants.AutoConstants.MOVEMENT_BUFFER_INCHES;
 
-        leftFrontDrive.setPower(power);
-        rightFrontDrive.setPower(-power);
-        leftBackDrive.setPower(-power);
-        rightBackDrive.setPower(power);
+        leftFrontDrive.setPower(-power);
+        rightFrontDrive.setPower(power);
+        leftBackDrive.setPower(power);
+        rightBackDrive.setPower(-power);
 
         final double startInches = ticksToInch(centerEncoder.getCurrentPosition());
 
@@ -352,7 +361,8 @@ public class AutoRedFar extends LinearOpMode {
 
         telemetry.clear();
     }
-    public void driveLeftInches(double inchesToGo) {
+
+    public void driveRightInches(double inchesToGo) {
         if (inchesToGo == 0) return;
 
         leftFrontDrive.setZeroPowerBehavior(Constants.DriverConstants.wheelMotorZeroPowerBehaviorDefault);
@@ -364,10 +374,10 @@ public class AutoRedFar extends LinearOpMode {
 
         final double distanceUntilStop = Math.abs(inchesToGo) - Constants.AutoConstants.MOVEMENT_BUFFER_INCHES;
 
-        leftFrontDrive.setPower(-power);
-        rightFrontDrive.setPower(power);
-        leftBackDrive.setPower(power);
-        rightBackDrive.setPower(-power);
+        leftFrontDrive.setPower(power);
+        rightFrontDrive.setPower(-power);
+        leftBackDrive.setPower(-power);
+        rightBackDrive.setPower(power);
 
         final double startInches = ticksToInch(centerEncoder.getCurrentPosition());
 

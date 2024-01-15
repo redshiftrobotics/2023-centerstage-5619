@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.concurrent.TimeUnit;
 
-@Autonomous(name = "AutoRedFar")
-public class AutoRedFar extends LinearOpMode {
+@Autonomous(name = "LameRedFar")
+public class LameRedFar extends LinearOpMode {
 
     private final ElapsedTime runtime = new ElapsedTime();
 
@@ -113,30 +113,29 @@ public class AutoRedFar extends LinearOpMode {
              *     public static class AutoConstants
              *         public static final double DOWN_DROPPER_POSITION = 100;
              */
-            waitSeconds(13);
-           // waitForStart();
+            waitSeconds(15);
+            waitForStart();
 
           //  setArmPosition(100);
 
             telemetry.addData("Status", "Run Time: %s", runtime.toString());
             // turn left.
-            driveRightInches(25);
-            waitSeconds(2);
-            driveForwardInches(-87);
-            telemetry.addData("Status", "about to move arm.");
-            while (opModeIsActive()) {
-
-                setArmPosition(3200); //Constants.ArmConstants.armUpSetPoint);
-                waitSeconds(5);
-                // setArmPosition(Constants.ArmConstants.armDownSetPoint);
-                setArmPosition(0);
-
-                break;
-            }
-
-            driveForwardInches(5);
-            driveLeftInches(25);
-            driveForwardInches(-10);
+            driveRightInches(2);
+            driveForwardInches(-82);
+//            telemetry.addData("Status", "about to move arm.");
+//            while (opModeIsActive()) {
+//
+//                setArmPosition(Constants.ArmConstants.armUpSetPoint);
+//                waitSeconds(5);
+//                // setArmPosition(Constants.ArmConstants.armDownSetPoint);
+//                setArmPosition(0);
+//
+//                break;
+//            }
+//
+//            driveForwardInches(5);
+//            driveLeftInches(24);
+//            driveForwardInches(-15);
 
             //  driveForwardInches(12);
 
